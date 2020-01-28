@@ -52,3 +52,24 @@ void TractorBeam::Periodic() {
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 
+void TractorBeam::Deploy()
+{
+    tractorBeamBay->Set(frc::DoubleSolenoid::Value::kForward);
+}
+
+void TractorBeam::Retract()
+{
+    tractorBeamBay->Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
+bool TractorBeam::IsDeployed()
+{
+    return tractorBeamBay->Get() == frc::DoubleSolenoid::Value::kForward;
+}
+
+// Run Motor(s) at specific speed
+// negative speed will Spit Out, zero to stop
+void TractorBeam::SpinIn(double speed)
+{
+    intakeMotor->Set(speed);
+}

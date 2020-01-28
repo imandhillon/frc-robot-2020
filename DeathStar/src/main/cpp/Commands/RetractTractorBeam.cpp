@@ -24,7 +24,7 @@ RetractTractorBeam::RetractTractorBeam(): frc::Command() {
 
 // Called just before this Command runs the first time
 void RetractTractorBeam::Initialize() {
-
+    Robot::tractorBeam->Retract();
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -34,7 +34,7 @@ void RetractTractorBeam::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool RetractTractorBeam::IsFinished() {
-    return false;
+    return true;
 }
 
 // Called once after isFinished returns true
@@ -45,5 +45,5 @@ void RetractTractorBeam::End() {
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void RetractTractorBeam::Interrupted() {
-
+    End();
 }

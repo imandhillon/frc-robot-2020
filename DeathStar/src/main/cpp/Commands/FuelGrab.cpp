@@ -25,7 +25,7 @@ m_speed = speed;
 
 // Called just before this Command runs the first time
 void FuelGrab::Initialize() {
-
+    Robot::tractorBeam->SpinIn(m_speed);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -40,11 +40,11 @@ bool FuelGrab::IsFinished() {
 
 // Called once after isFinished returns true
 void FuelGrab::End() {
-
+     Robot::tractorBeam->SpinIn(0.0);
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void FuelGrab::Interrupted() {
-
+    End();
 }

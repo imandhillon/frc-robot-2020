@@ -9,19 +9,24 @@
 
 #include <frc/Encoder.h>
 #include <frc/PWMVictorSPX.h>
+#include <frc/AnalogEncoder.h>
+#include <frc/AnalogInput.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <wpi/math>
 
+#include <rev/CANSparkMax.h>
+
 class SwerveModule {
  public:
-  SwerveModule(int driveMotorChannel, int turningMotorChannel);
-  frc::SwerveModuleState GetState() const;
+  SwerveModule(int driveMotorChannel, int turningMotorChannel, int turningEncoderAnalogInput);
+  frc::SwerveModuleState GetState(); // const;
   void SetDesiredState(const frc::SwerveModuleState& state);
 
  private:
-  static constexpr double kWheelRadius = 0.0508;
+    // 3.5"  ==  0.0889
+  static constexpr double kWheelRadius = 0.0889;
   static constexpr int kEncoderResolution = 4096;
 
   static constexpr auto kModuleMaxAngularVelocity =
@@ -29,11 +34,20 @@ class SwerveModule {
   static constexpr auto kModuleMaxAngularAcceleration =
       wpi::math::pi * 2_rad_per_s / 1_s;  // radians per second^2
 
+  rev::CANSparkMax m_driveMotor;
+  rev::CANSparkMax m_turningMotor;
+
+  rev::CANEncoder m_driveEncoder;
+  frc::AnalogInput m_turningInput;
+  frc::AnalogEncoder m_turningEncoder;
+
+/*
   frc::PWMVictorSPX m_driveMotor;
   frc::PWMVictorSPX m_turningMotor;
 
   frc::Encoder m_driveEncoder{0, 1};
   frc::Encoder m_turningEncoder{2, 3};
+*/
 
   frc2::PIDController m_drivePIDController{1.0, 0, 0};
   frc::ProfiledPIDController<units::radians> m_turningPIDController{

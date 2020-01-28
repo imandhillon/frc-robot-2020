@@ -42,13 +42,17 @@ class Drivetrain {
       wpi::math::pi};  // 1/2 rotation per second
 
  private:
-  frc::Translation2d m_frontLocation{+0.381_m, +0.0_m};
-  frc::Translation2d m_backLeftLocation{-0.381_m, +0.381_m};
-  frc::Translation2d m_backRightLocation{-0.381_m, -0.381_m};
+ // front 8.5" == 0.2159m
+  frc::Translation2d m_frontLocation{+0.2159_m, +0.0_m};
+  // rear 7.25"  == 0.18415m
+  frc::Translation2d m_backLeftLocation{-0.2159_m, +0.18415_m};
+  frc::Translation2d m_backRightLocation{-0.2159_m, -0.18415_m};
 
-  SwerveModule m_front{1, 2};
-  SwerveModule m_backLeft{5, 6};
-  SwerveModule m_backRight{7, 8};
+// CAN ID's 3/5/7 Drive
+// CAN ID's 4/6/8 turn
+  SwerveModule m_front{3, 4, 0};
+  SwerveModule m_backLeft{5, 6, 1};
+  SwerveModule m_backRight{7, 8, 2};
 
   //frc::AnalogGyro m_gyro{0};
   frc::ADXRS450_Gyro m_gyro;

@@ -24,7 +24,12 @@ DeployTractorBeam::DeployTractorBeam(): frc::Command() {
 
 // Called just before this Command runs the first time
 void DeployTractorBeam::Initialize() {
-    Robot::tractorBeam->Deploy();
+
+    // Toggle the deployment state
+    if (Robot::tractorBeam->IsDeployed())
+        Robot::tractorBeam->Retract();
+    else       
+        Robot::tractorBeam->Deploy();
 }
 
 // Called repeatedly when this Command is scheduled to run

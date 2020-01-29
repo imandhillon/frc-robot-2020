@@ -11,6 +11,12 @@
 
 #include "rev/ColorSensorV3.h"
 #include "rev/ColorMatch.h"
+#include "frc/WPILib.h"
+#include "ctre/Phoenix.h"
+#include "frc/Joystick.h"
+//#include "frc/buttons/JoystickButton.h"
+
+using namespace frc;
 
 /**
  * This is a simple example to show how the REV Color Sensor V3 can be used to
@@ -28,6 +34,11 @@ class Robot : public frc::TimedRobot {
    * parameters.
    */
   rev::ColorSensorV3 m_colorSensor{i2cPort};
+
+  WPI_TalonSRX * _rghtFront = new WPI_TalonSRX(3);
+  //std::shared_ptr<frc::Joystick> operatorJoystick;
+  Joystick * _operator = new Joystick(0);
+  
 
   /**
    * A Rev Color Match object is used to register and detect known colors. This can 
@@ -66,25 +77,42 @@ class Robot : public frc::TimedRobot {
      * measurements and make it difficult to accurately determine its color.
      */
     frc::Color detectedColor = m_colorSensor.GetColor();
-
+    float mSpeed = 0.;
     /**
      * Run the color match algorithm on our detected color
      */
     std::string colorString;
     double confidence = 0.0;
     frc::Color matchedColor = m_colorMatcher.MatchClosestColor(detectedColor, confidence);
+    boolean buttonValue;
 
-    if (matchedColor == kBlueTarget) {
+
+    buttonValue = _operator.getTrigger()
+
+    if (matchedColor == kBlueTarget && buttonValue) {
       colorString = "Blue";
-    } else if (matchedColor == kRedTarget) {
+      mSpeed = 0.2;
+    } else if (matchedColor == kRedTarget && buttonValue) {
       colorString = "Red";
-    } else if (matchedColor == kGreenTarget) {
+      mSpeed = 0.2;
+    } else if (matchedColor == kGreenTarget && buttonValue) {
       colorString = "Green";
+      mSpeed = 0.2;
     } else if (matchedColor == kYellowTarget) {
       colorString = "Yellow";
+      mSpeed = 0.;
+      if(buttonValue) {
+        mSpeed = 0.2
+      }
     } else {
       colorString = "Unknown";
+      mSpeed = 0.;
+      if(buttonValue) {
+        mSpeed = 0.2
+      }
     }
+    
+    _rghtFront->Set(mSpeed);
 
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 

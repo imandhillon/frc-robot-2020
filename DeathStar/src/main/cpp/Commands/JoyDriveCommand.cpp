@@ -29,6 +29,8 @@ void JoyDriveCommand::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void JoyDriveCommand::Execute() {
+ 
+   Robot::hyperdrive->DriveArcade(Robot::oi->getDriverJoystick());
 
 }
 

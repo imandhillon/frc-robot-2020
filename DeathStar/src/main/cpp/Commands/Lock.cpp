@@ -25,12 +25,21 @@ m_speed = speed;
 
 // Called just before this Command runs the first time
 void Lock::Initialize() {
-
+    //Robot::plasmaTank->RunConveyor(m_speed);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Lock::Execute() {
+    double speed = Robot::oi->getDriverJoystick()->GetY();
+    if (speed > -0.1 && speed < 0.1)
+        speed = 0.0;
+    Robot::plasmaTank->RunConveyor(speed);
 
+   /*  speed = Robot::oi->getDriverJoystick()->GetRawAxis(5);
+    if (speed > -0.1 && speed < 0.1)
+        speed = 0.0;
+    Robot::plasmaTank->RunLoader(speed);
+*/
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -40,11 +49,11 @@ bool Lock::IsFinished() {
 
 // Called once after isFinished returns true
 void Lock::End() {
-
+    Robot::plasmaTank->StopConveyor();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void Lock::Interrupted() {
-
+    End();
 }

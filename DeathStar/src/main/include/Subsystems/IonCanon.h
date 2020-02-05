@@ -65,5 +65,7 @@ IonCanon();
 	void AimDown();
 	void AimStop();
 
+	// Burn CANSparkMAX settings on motors
+	void Burn();
 };
 

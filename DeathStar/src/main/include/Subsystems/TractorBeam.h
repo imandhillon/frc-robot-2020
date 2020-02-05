@@ -50,6 +50,8 @@ TractorBeam();
 	// Motors
 	void	SpinIn(double speed);		// negative speed will Spit Out, zero to stop
 
+	// Burn CANSparkMAX settings on motors
+	void Burn();
 
 };
 

@@ -53,6 +53,8 @@ PlasmaTank();
 	void RunLoader(double speed = 1.0);
 	void StopLoader() { RunLoader(0.0); }
 
+	// Burn CANSparkMAX settings on motors
+	void Burn();
 
 };
 

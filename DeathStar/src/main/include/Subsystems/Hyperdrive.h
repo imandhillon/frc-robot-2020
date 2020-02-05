@@ -49,5 +49,8 @@ Hyperdrive();
 	void DriveArcade(std::shared_ptr<frc::Joystick> j);
 	void DriveStraight(double speed);
 	void DriveTurn(double speed);
+
+	// Burn CANSparkMAX settings on motors
+	void Burn();
 };
 

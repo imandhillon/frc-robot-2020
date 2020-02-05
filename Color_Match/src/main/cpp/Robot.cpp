@@ -53,10 +53,10 @@ class Robot : public frc::TimedRobot {
    * Note: Any example colors should be calibrated as the user needs, these
    * are here as a basic example.
    */
-  static constexpr frc::Color kBlueTarget = frc::Color(0.143, 0.427, 0.429);
-  static constexpr frc::Color kGreenTarget = frc::Color(0.197, 0.561, 0.240);
-  static constexpr frc::Color kRedTarget = frc::Color(0.561, 0.232, 0.114);
-  static constexpr frc::Color kYellowTarget = frc::Color(0.361, 0.524, 0.113);
+  static constexpr frc::Color kBlueTarget = frc::Color(0.11, 0.41, 0.45);
+  static constexpr frc::Color kGreenTarget = frc::Color(0.16, 0.57, 0.26);
+  static constexpr frc::Color kRedTarget = frc::Color(0.51, 0.35, 0.13);
+  static constexpr frc::Color kYellowTarget = frc::Color(0.31, 0.55, 0.12);
 
  public:
   void RobotInit() {
@@ -84,32 +84,26 @@ class Robot : public frc::TimedRobot {
     std::string colorString;
     double confidence = 0.0;
     frc::Color matchedColor = m_colorMatcher.MatchClosestColor(detectedColor, confidence);
-    boolean buttonValue;
 
-
-    buttonValue = _operator.getTrigger()
-
-    if (matchedColor == kBlueTarget && buttonValue) {
+    if (matchedColor == kBlueTarget) {
       colorString = "Blue";
       mSpeed = 0.2;
-    } else if (matchedColor == kRedTarget && buttonValue) {
+    } 
+    else if (matchedColor == kRedTarget) {
       colorString = "Red";
       mSpeed = 0.2;
-    } else if (matchedColor == kGreenTarget && buttonValue) {
+    } 
+    else if (matchedColor == kGreenTarget) {
       colorString = "Green";
       mSpeed = 0.2;
-    } else if (matchedColor == kYellowTarget) {
+    } 
+    else if (matchedColor == kYellowTarget) {
       colorString = "Yellow";
       mSpeed = 0.;
-      if(buttonValue) {
-        mSpeed = 0.2
-      }
-    } else {
+    } 
+    else {
       colorString = "Unknown";
       mSpeed = 0.;
-      if(buttonValue) {
-        mSpeed = 0.2
-      }
     }
     
     _rghtFront->Set(mSpeed);
@@ -123,10 +117,11 @@ class Robot : public frc::TimedRobot {
     frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("Confidence", confidence);
     frc::SmartDashboard::PutString("Detected Color", colorString);
-
   }
 };
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main() { 
+  return frc::StartRobot<Robot>(); 
+  }
 #endif

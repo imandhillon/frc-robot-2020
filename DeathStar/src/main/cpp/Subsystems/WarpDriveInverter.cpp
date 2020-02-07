@@ -78,4 +78,30 @@ void WarpDriveInverter::Periodic() {
     frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("Confidence", confidence);
     frc::SmartDashboard::PutString("Detected Color", colorString);
+    
+    std::string gameData;
+    gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+    if(gameData.length() > 0)
+    {
+      switch (gameData[0])
+      {
+        case 'B' :
+          frc::SmartDashboard::PutString("Game Data Color", "BLUE");
+          break;
+        case 'G' :
+          frc::SmartDashboard::PutString("Game Data Color", "GREEN");
+          break;
+        case 'R' :
+          frc::SmartDashboard::PutString("Game Data Color", "RED");
+          break;
+        case 'Y' :
+          frc::SmartDashboard::PutString("Game Data Color", "YELLOW");
+          break;
+        default :
+          frc::SmartDashboard::PutString("Game Data Color", "ERROR");
+          break;
+      }
+    } else {
+      frc::SmartDashboard::PutString("Game Data Color", "NO INFO");
+    }
 }

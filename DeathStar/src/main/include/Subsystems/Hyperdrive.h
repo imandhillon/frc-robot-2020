@@ -31,9 +31,12 @@
  */
 class Hyperdrive: public frc::Subsystem {
 private:
-  static constexpr units::meter_t kTrackWidth = 27.0_in;//0.381_m * 2;
+  static constexpr units::meter_t kTrackWidth = 30.0_in;
   static constexpr units::meter_t kWheelRadius = 3.0_in;
-  static constexpr int kEncoderResolution = 4096;
+  //static constexpr double kGearRatio = 7.31;  // 14.7 ft/sec
+  //static constexpr double kGearRatio = 8.45;  // 12.7 ft/sec
+  static constexpr double kGearRatio = 5.95;  // 18.0 ft/sec
+  //static constexpr double kEncoderResolution = 42;  // get this directly from the encoder now
 
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities

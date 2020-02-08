@@ -55,13 +55,13 @@ std::shared_ptr<rev::CANSparkMax> rightMotor2;
 	frc2::PIDController m_leftPIDController{1.0, 0.0, 0.0};
   	frc2::PIDController m_rightPIDController{1.0, 0.0, 0.0};
   	frc::DifferentialDriveKinematics m_kinematics{kTrackWidth};
-  	frc::DifferentialDriveOdometry m_odometry{GetAngle()};
+  	//frc::DifferentialDriveOdometry m_odometry{GetAngle()};
 
-  	static constexpr units::meters_per_second_t kMaxSpeed =      6.0_mps;  // 3 meters per second
-  	static constexpr units::radians_per_second_t kMaxAngularSpeed{wpi::math::pi};  // 1/2 rotation per second
+  	//static constexpr units::meters_per_second_t kMaxSpeed =      6.0_mps;  // 3 meters per second
+  	//static constexpr units::radians_per_second_t kMaxAngularSpeed{wpi::math::pi};  // 1/2 rotation per second
 
   	void SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds);
-  	void UpdateOdometry();
+  	//void UpdateOdometry();
 
 public:
 Hyperdrive();
@@ -80,8 +80,8 @@ Hyperdrive();
 	void ResetPose();
 
 	void DriveArcade(std::shared_ptr<frc::Joystick> j);
-	void DriveStraight(double speed);
-	void DriveTurn(double speed);
+	//void DriveStraight(double speed);
+	//void DriveTurn(double speed);
 
 	// drive using kinematics
   	void Drive(units::meters_per_second_t xSpeed, units::radians_per_second_t rot);

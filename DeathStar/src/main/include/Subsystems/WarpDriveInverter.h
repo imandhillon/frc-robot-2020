@@ -35,6 +35,9 @@ private:
 	std::shared_ptr<rev::CANEncoder> wheelEncoder;
 	std::shared_ptr<rev::ColorSensorV3> colorSensor;
 	std::shared_ptr<rev::ColorMatch> colorMatcher;
+
+	int currentColor;
+	int requestedColor;
  
 	static constexpr frc::Color kBlueTarget = frc::Color(0.11, 0.41, 0.45); //will eventually change to be configured in shuffleboard config
  	static constexpr frc::Color kGreenTarget = frc::Color(0.16, 0.57, 0.26);
@@ -47,9 +50,12 @@ WarpDriveInverter();
 	void InitDefaultCommand() override;
 	void Periodic() override;
 	void ColorMatcherInit();
-	void MoveMotor(float power);
-	frc::Color getColor();
+	void MoveMotor();
+	void Halt();
+	void ReverseReverse();
+	int getDetectedColor();
 	int getRequestedColor();
+	enum {BLUE = 0, GREEN = 1, YELLOW = 2, RED = 3, ERROR = 4, NO_INFO = -1};
 
 };
 

@@ -38,14 +38,23 @@ void WarpDriveInverter::ColorMatcherInit()
 }
 
   
-void WarpDriveInverter::MoveMotor(float power){
-
+void WarpDriveInverter::MoveMotor(){
+  wheelMotor -> Set(0.2); //set at a fixed power for now, will eventually be on a PID velocity
 }
-frc::Color WarpDriveInverter::getColor(){
-  return colorSensor -> GetColor();
+
+void WarpDriveInverter::Halt(){
+  wheelMotor -> Set(0);
+}
+
+void WarpDriveInverter::ReverseReverse(){
+  wheelMotor -> Set(-0.2); //set at a fixed power for now, will eventually be on a PID velocity
+}
+
+int WarpDriveInverter::getDetectedColor(){
+  return currentColor;
 }
 int WarpDriveInverter::getRequestedColor(){
-  return 0;
+  return requestedColor;
 } 
 
 void WarpDriveInverter::InitDefaultCommand() {
@@ -68,18 +77,23 @@ void WarpDriveInverter::Periodic() {
 
     if (matchedColor == kBlueTarget) {
       colorString = "Blue";
+      currentColor = BLUE;
     } 
     else if (matchedColor == kRedTarget) {
       colorString = "Red";
+      currentColor = RED;
     } 
     else if (matchedColor == kGreenTarget) {
       colorString = "Green";
+      currentColor = GREEN;
     } 
     else if (matchedColor == kYellowTarget) {
       colorString = "Yellow";
+      currentColor = YELLOW;
     } 
     else {
       colorString = "Unknown";
+      currentColor = ERROR;
     }
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
@@ -99,28 +113,34 @@ void WarpDriveInverter::Periodic() {
       {
         case 'B' :
           frc::SmartDashboard::PutString("Game Data Color", "BLUE");
+          requestedColor = BLUE;
           frc::SmartDashboard::PutBoolean("Got color FMS", true);
           break;
         case 'G' :
           frc::SmartDashboard::PutString("Game Data Color", "GREEN");
+          requestedColor = GREEN;
           frc::SmartDashboard::PutBoolean("Got color FMS", true);
           break;
         case 'R' :
           frc::SmartDashboard::PutString("Game Data Color", "RED");
+          requestedColor = RED;
           frc::SmartDashboard::PutBoolean("Got color FMS", true);
           break;
         case 'Y' :
           frc::SmartDashboard::PutString("Game Data Color", "YELLOW");
+          requestedColor = YELLOW;
           frc::SmartDashboard::PutBoolean("Got color FMS", true);
           break;
         default :
           frc::SmartDashboard::PutString("Game Data Color", "ERROR");
+          requestedColor = ERROR;
           frc::SmartDashboard::PutBoolean("Got color FMS", false);
           break;
       }
     } 
     else {
       frc::SmartDashboard::PutString("Game Data Color", "NO INFO");
+      requestedColor = NO_INFO;
       frc::SmartDashboard::PutBoolean("Got color FMS", false);
     }
 }

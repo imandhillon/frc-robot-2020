@@ -32,6 +32,23 @@ void JoyDriveCommand::Execute() {
  
    Robot::hyperdrive->DriveArcade(Robot::oi->getDriverJoystick());
 
+
+/*  TEST ME TEST ME TEST ME TEST ME
+
+    // Get the x speed. We are inverting this because Xbox controllers return
+    // negative values when we push forward.
+    const auto xSpeed =
+        -Robot::oi->getDriverJoystick()->GetY(frc::GenericHID::kLeftHand) * Hyperdrive::kMaxSpeed;
+
+    // Get the rate of angular rotation. We are inverting this because we want a
+    // positive value when we pull to the left (remember, CCW is positive in
+    // mathematics). Xbox controllers return positive values when you pull to
+    // the right by default.
+    const auto rot = -Robot::oi->getDriverJoystick()->GetX(frc::GenericHID::kRightHand) *
+                     Hyperdrive::kMaxAngularSpeed;
+
+    Robot::hyperdrive->Drive(xSpeed, rot);
+*/
 }
 
 // Make this return true when this Command no longer needs to run execute()

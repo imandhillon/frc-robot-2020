@@ -57,13 +57,14 @@ std::shared_ptr<rev::CANSparkMax> rightMotor2;
   	frc::DifferentialDriveKinematics m_kinematics{kTrackWidth};
   	frc::DifferentialDriveOdometry m_odometry{GetAngle()};
 
-  	static constexpr units::meters_per_second_t kMaxSpeed =      6.0_mps;  // 3 meters per second
-  	static constexpr units::radians_per_second_t kMaxAngularSpeed{wpi::math::pi};  // 1/2 rotation per second
-
   	void SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds);
   	void UpdateOdometry();
 
 public:
+  	static constexpr units::meters_per_second_t kMaxSpeed =      6.0_mps;  // 6 meters per second
+  	static constexpr units::radians_per_second_t kMaxAngularSpeed{wpi::math::pi};  // 1/2 rotation per second
+
+
 Hyperdrive();
 	void InitDefaultCommand() override;
 	void Periodic() override;

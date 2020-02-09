@@ -30,7 +30,7 @@ void Lock::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Lock::Execute() {
-    double speed = Robot::oi->getDriverJoystick()->GetY();
+    double speed = Robot::oi->getOperatorJoystick()->GetY();
     if (speed > -0.1 && speed < 0.1)
         speed = 0.0;
     Robot::plasmaTank->RunConveyor(speed);

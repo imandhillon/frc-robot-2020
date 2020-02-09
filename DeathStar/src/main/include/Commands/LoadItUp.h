@@ -10,9 +10,9 @@
 #include <frc/commands/Command.h>
 #include "Robot.h"
 
-class TripleSpinControlPanel : public frc::Command {
+class LoadItUp : public frc::Command {
  public:
-  TripleSpinControlPanel();
+  LoadItUp();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;

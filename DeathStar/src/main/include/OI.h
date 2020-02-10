@@ -39,6 +39,16 @@ private:
 
 
 std::shared_ptr<frc::Joystick> operatorJoystick;
+std::shared_ptr<frc::JoystickButton> opAButton;
+std::shared_ptr<frc::JoystickButton> opBButton;
+std::shared_ptr<frc::JoystickButton> opXButton;
+std::shared_ptr<frc::JoystickButton> opYButton;
+
+std::shared_ptr<frc::JoystickButton> opStartButton;
+std::shared_ptr<frc::JoystickButton> opBackButton;
+
+std::shared_ptr<frc::JoystickButton> opRightBumper;
+std::shared_ptr<frc::JoystickButton> opLeftBumper;
 //std::shared_ptr<frc::JoystickButton> spinWheelFieldBtn;
 //std::shared_ptr<frc::JoystickButton> spinWheelRightBtn;
 //std::shared_ptr<frc::JoystickButton> spinWheelLeftBtn;

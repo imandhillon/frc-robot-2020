@@ -32,7 +32,7 @@ void Load::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Load::Execute() {
-    double speed = Robot::oi->getOperatorJoystick()->GetY();
+    double speed = Robot::oi->getOperatorJoystick()->GetX();
     if (speed > -0.1 && speed < 0.1)
         speed = 0.0;
     Robot::plasmaTank->RunLoader(speed);

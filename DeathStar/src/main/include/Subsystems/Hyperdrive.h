@@ -55,10 +55,10 @@ std::shared_ptr<rev::CANSparkMax> rightMotor2;
 	frc2::PIDController m_leftPIDController{1.0, 0.0, 0.0};
   	frc2::PIDController m_rightPIDController{1.0, 0.0, 0.0};
   	frc::DifferentialDriveKinematics m_kinematics{kTrackWidth};
-  	//frc::DifferentialDriveOdometry m_odometry{GetAngle()};
+  	frc::DifferentialDriveOdometry m_odometry{GetAngle()};
 
   	void SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds);
-  	//void UpdateOdometry();
+  	void UpdateOdometry();
 
 public:
   	static constexpr units::meters_per_second_t kMaxSpeed =      6.0_mps;  // 6 meters per second

@@ -38,17 +38,18 @@ void WarpDriveInverter::ColorMatcherInit()
 }
 
   
-void WarpDriveInverter::MoveMotor(){
-  wheelMotor -> Set(0.2); //set at a fixed power for now, will eventually be on a PID velocity
+void WarpDriveInverter::MoveMotor(double speed){
+  wheelMotor->Set(speed); //set at a fixed power for now, will eventually be on a PID velocity
 }
 
 void WarpDriveInverter::Halt(){
-  wheelMotor -> Set(0);
+  wheelMotor->StopMotor();
 }
-
+/*
 void WarpDriveInverter::ReverseReverse(){
-  wheelMotor -> Set(-0.2); //set at a fixed power for now, will eventually be on a PID velocity
+  wheelMotor->Set(-1.0); //set at a fixed power for now, will eventually be on a PID velocity
 }
+*/
 
 int WarpDriveInverter::getDetectedColor(){
   return currentColor;

@@ -83,29 +83,14 @@ void IonCanon::Periodic() {
 // here. Call these from Commands.
 
 // Shooter 
-void IonCanon::LoadFuel()
+void IonCanon::SpinShooter(double speed)
 {
-    
+    shooterMotor1->Set(speed);
 }
 
-void IonCanon::EjectFuel()
+void IonCanon::StopShooter()
 {
-
-}
-
-void IonCanon::Shoot()
-{
-
-}
-
-void IonCanon::SpinUpShooter()
-{
-    shooterMotor1->Set(1.0);
-}
-
-void IonCanon::SpinDownShooter()
-{
-    shooterMotor1->Set(0.0);
+    shooterMotor1->StopMotor();
 }
 
 // Turn Turret

@@ -25,7 +25,7 @@ m_speed = speed;
 
 // Called just before this Command runs the first time
 void SpinWheel::Initialize() {
-
+    Robot::warpDriveInverter->MoveMotor(m_speed);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -40,11 +40,11 @@ bool SpinWheel::IsFinished() {
 
 // Called once after isFinished returns true
 void SpinWheel::End() {
-
+    Robot::warpDriveInverter->Halt();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void SpinWheel::Interrupted() {
-
+    End();
 }

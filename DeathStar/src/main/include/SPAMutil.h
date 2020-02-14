@@ -6,7 +6,8 @@
 #ifndef SPAMUTIL_H_
 #define SPAMUTIL_H_
 
-#include "frc/WPILib.h"
+#include "frc/Timer.h"
+
 
 /**
  * Class of static methods for common operations.

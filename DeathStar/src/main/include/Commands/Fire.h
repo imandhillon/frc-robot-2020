@@ -24,5 +24,7 @@ class Fire: public frc::CommandGroup {
 public:
 	Fire();
 
+	void Interrupted() override;
+
 private:
 };

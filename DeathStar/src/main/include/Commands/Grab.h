@@ -13,12 +13,12 @@
 
 
 // which direction, in or out
-enum GrabDirection { kIn = 1, kOut = -1 };
+enum GrabDirection { kGrabIn = 1, kSpitOut = -1 };
 
 class Grab: public frc::CommandGroup {
 public:
 
-	Grab(GrabDirection direction = kIn);
+	Grab(GrabDirection direction = kGrabIn);
 	void Interrupted() override;
 
 private:

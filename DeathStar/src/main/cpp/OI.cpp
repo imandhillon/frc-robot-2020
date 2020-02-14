@@ -36,6 +36,7 @@
 #include "Commands/SpinWheel.h"
 #include "Commands/SpinWheelField.h"
 #include "Commands/ToggleTractorBeam.h"
+
 //#include "Commands/TripleSpinControlPanel.h"
 //#include "Commands/LoadItUp.h"
 
@@ -115,10 +116,12 @@ aimLeftBtn->WhileHeld(new AimLeft());
 */
 driverJoystick.reset(new frc::Joystick(0));
 
-//gravitateDownBtn.reset(new frc::JoystickButton(driverJoystick.get(), 3));
-//gravitateDownBtn->WhileHeld(new Gravitate(-0.5));
+//gravitateDownBtn.reset(new frc::JoystickButton(driverJoystick.get(), 8));
+//gravitateDownBtn->WhenPressed(new Gravitate(TheForce::EWOK_HEIGHT,0.5));
+//gravitateUpBtn.reset(new frc::JoystickButton(driverJoystick.get(), 9));
+//gravitateUpBtn->WhenPressed(new Gravitate(TheForce::SOLO_HEIGHT,0.5));
 //gravitateUpBtn.reset(new frc::JoystickButton(driverJoystick.get(), 2));
-//gravitateUpBtn->WhileHeld(new Gravitate(0.5));
+//gravitateUpBtn->WhenPressed(new Gravitate(TheForce::WOOKIE_HEIGHT,0.5));
 //shootBtn.reset(new frc::JoystickButton(driverJoystick.get(), 1));
 //shootBtn->WhenPressed(new Fire());
 

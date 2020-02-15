@@ -45,6 +45,7 @@ void WarpDriveInverter::MoveMotor(double speed){
 void WarpDriveInverter::Halt(){
   wheelMotor->StopMotor();
 }
+
 /*
 void WarpDriveInverter::ReverseReverse(){
   wheelMotor->Set(-1.0); //set at a fixed power for now, will eventually be on a PID velocity
@@ -57,6 +58,18 @@ int WarpDriveInverter::getDetectedColor(){
 int WarpDriveInverter::getRequestedColor(){
   return requestedColor;
 } 
+
+uint32_t WarpDriveInverter::getProximity(){
+  return colorSensor -> GetProximity();
+}
+
+double WarpDriveInverter::getPosition(){
+  return wheelEncoder -> GetPosition();
+}
+
+bool WarpDriveInverter::inRange(){
+  return colorSensor ->GetProximity() > MAX_DISTANCE;
+}
 
 void WarpDriveInverter::InitDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -73,7 +86,7 @@ void WarpDriveInverter::Periodic() {
      * Run the color match algorithm on our detected color
      */
     std::string colorString;
-    double confidence = 0.0;
+    double confidence = -1.0;
     frc::Color matchedColor = colorMatcher -> MatchClosestColor(detectedColor, confidence);
 
     if (matchedColor == kBlueTarget) {
@@ -105,6 +118,8 @@ void WarpDriveInverter::Periodic() {
     frc::SmartDashboard::PutNumber("Blue", detectedColor.blue);
     frc::SmartDashboard::PutNumber("Confidence", confidence);
     frc::SmartDashboard::PutString("Detected Color", colorString);
+    frc::SmartDashboard::PutNumber("Proximity", colorSensor ->GetProximity());
+    frc::SmartDashboard::PutBoolean("CPanel In Range", inRange());
     
     std::string gameData;
     gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();

@@ -57,7 +57,7 @@ OI::OI() {
 
     //A Button
     opAButton.reset(new frc::JoystickButton(operatorJoystick.get(), 1));
-    opAButton->WhileHeld(new Load(PlasmaTank::kConveyorSpeed));
+    opAButton->WhileHeld(new Lock(PlasmaTank::kConveyorSpeed));
 
     //B Button
     opBButton.reset(new frc::JoystickButton(operatorJoystick.get(), 2));
@@ -103,15 +103,15 @@ OI::OI() {
     drYButton->WhenPressed(new CeaseShooter());
 
     drStartButton.reset(new frc::JoystickButton(driverJoystick.get(), 8));
-    drStartButton->WhenPressed(new Load(TheForce::SOLO_HEIGHT));
+    drStartButton->WhenPressed(new Gravitate(TheForce::SOLO_HEIGHT,0.5));
  
     drBackButton.reset(new frc::JoystickButton(driverJoystick.get(), 7));
-    drBackButton->WhenPressed(new Load(TheForce::WOOKIE_HEIGHT));
+    drBackButton->WhenPressed(new Gravitate(TheForce::WOOKIE_HEIGHT,0.5));
 
     //drRightBumper.reset(new frc::JoystickButton(driverJoystick.get(), 6));
     //drLeftBumper.reset(new frc::JoystickButton(driverJoystick.get(), 5));
     drRightStickBtn.reset(new frc::JoystickButton(driverJoystick.get(), 10));
-    drRightStickBtn->WhenPressed(new Load(TheForce::EWOK_HEIGHT));
+    drRightStickBtn->WhenPressed(new Gravitate(TheForce::EWOK_HEIGHT,0.3));
 
 
     // SmartDashboard Buttons

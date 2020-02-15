@@ -5,6 +5,7 @@ constexpr double kDeadband = 0.1;
 
 AimJoystick::AimJoystick(): frc::Command() {
 	Requires(Robot::ionCanon.get());
+    //SetInterruptible(false);
 }
 
 // Called just before this Command runs the first time
@@ -31,6 +32,8 @@ void AimJoystick::Execute() {
     }
 
     // Move the dome up/down
+    Robot::ionCanon->SetServo(y);
+    /*
     if (y > 0) {
         Robot::ionCanon->AimUp();
     } else if (y < 0) {
@@ -38,7 +41,7 @@ void AimJoystick::Execute() {
     } else {
         Robot::ionCanon->StopDome();
     }
-
+    */
 }
 
 // Make this return true when this Command no longer needs to run execute()

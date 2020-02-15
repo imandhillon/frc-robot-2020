@@ -23,16 +23,18 @@ IonCanon::IonCanon() : frc::Subsystem("IonCanon") {
 shooterMotor1.reset(new rev::CANSparkMax(12, rev::CANSparkMax::MotorType::kBrushless));
 shooterMotor2.reset(new rev::CANSparkMax(13, rev::CANSparkMax::MotorType::kBrushless));
 turretMotor.reset(new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushless));
-domeServo.reset(new frc::Servo(4));
+domeServo.reset(new frc::Servo(5));
 AddChild("DomeServo", domeServo);
 
 turretReferenceSwitch.reset(new frc::DigitalInput(5));
 AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
-turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
+/*turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
 AddChild("TurretQuadEncoder", turretQuadEncoder);
 turretQuadEncoder->SetDistancePerPulse(1.0);
 turretQuadEncoder->SetPIDSourceType(frc::PIDSourceType::kRate);
+*/
+
 loadedSensor.reset(new frc::DigitalInput(12));
 AddChild("LoadedSensor", loadedSensor);
 
@@ -88,6 +90,11 @@ void IonCanon::AimDown()
 {
     domeServo->SetSpeed(-kDomeSpeed);
 }
+
+void IonCanon::SetServo(float value){
+    domeServo->Set(value / 2 + 0.5);
+}
+
 void IonCanon::AimStop()
 {
     turretMotor->StopMotor();

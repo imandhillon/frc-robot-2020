@@ -82,7 +82,7 @@ void TheForce::YodaLift()
 	   lSetPoint = m_LiftSetPoint;
 
 // allow a vernier
-        std::shared_ptr<frc::Joystick> joyy = Robot::oi->getOperatorJoystick();
+        std::shared_ptr<frc::Joystick> joyy = Robot::oi->getDriverJoystick();
         double vernyY = -(joyy->GetRawAxis(5));	
         vernyY *= 10.;
 
@@ -117,7 +117,7 @@ void TheForce::YodaLift()
     void TheForce::SetLiftSolo()   // hang
     {
       // allow a vernier
-      std::shared_ptr<frc::Joystick> joyy = Robot::oi->getOperatorJoystick();
+      std::shared_ptr<frc::Joystick> joyy = Robot::oi->getDriverJoystick();
       double vernyY = -(joyy->GetRawAxis(5));	
       vernyY *= 50.;
        
@@ -135,7 +135,7 @@ void TheForce::YodaLift()
         double pos = m_LiftSetPoint;    
 
         // allow a vernier
-        std::shared_ptr<frc::Joystick> joyy = Robot::oi->getOperatorJoystick();
+        std::shared_ptr<frc::Joystick> joyy = Robot::oi->getDriverJoystick();
         double vernyY = -(joyy->GetRawAxis(5));	
         vernyY *= 10.;
        

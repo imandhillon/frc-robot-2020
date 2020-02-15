@@ -58,25 +58,7 @@ LifeSupport();
 	double Xgeez();
 	double Ygeez();
 	double Zgeez();
-	/*
-// LimeLight -- 
-	void LimeRoxTrack();
-	bool getLimeRoxInView();
-	double getLimeRoxX();
-	double getLimeRoxY();
-	double getLimeRoxA();
-	double getLimeRoxS();
-	void setLimeRoxPipe0();
-	void LimeRoxLEDOn();
-	void LimeRoxLEDOff();
-    void LimeRoxLEDBlnk();
-
-	double m_targetsAvailable;
-	double m_targetX;
-	double m_targetY;
-	double m_targetArea;
-	double m_targetSkew;
-	*/
+	
 
 };
 

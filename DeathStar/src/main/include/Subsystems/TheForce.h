@@ -44,7 +44,7 @@ frc2::PIDController m_liftPIDController{1.0, 0.0, 0.0};
 public:
     static constexpr double BANGBANG_LO_SIDE = -50.;
     static constexpr double BANGBANG_HI_SIDE =  50.;
-    static constexpr double WOOKIE_HEIGHT    =  1450.;
+    static constexpr double WOOKIE_HEIGHT    =  1350; //1450.;
     static constexpr double EWOK_HEIGHT      =  50.;
     static constexpr double SOLO_HEIGHT      =  950.;
     double m_BangBang_Speed   =  0.50;

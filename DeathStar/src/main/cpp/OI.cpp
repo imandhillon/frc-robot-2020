@@ -38,6 +38,8 @@
 #include "Commands/ToggleTractorBeam.h"
 #include "Commands/TripleSpinControlPanel.h"
 #include "Commands/LoadItUp.h"
+#include "Commands/CeaseShooter.h"
+
 
 
 OI::OI() {
@@ -97,15 +99,19 @@ OI::OI() {
     drXButton.reset(new frc::JoystickButton(driverJoystick.get(), 3));
     drXButton->WhileHeld(new Fire());
 
-    //drYButton.reset(new frc::JoystickButton(driverJoystick.get(), 4));
+    drYButton.reset(new frc::JoystickButton(driverJoystick.get(), 4));
+    drYButton->WhenPressed(new CeaseShooter());
 
-    //drStartButton.reset(new frc::JoystickButton(driverJoystick.get(), 8));
+    drStartButton.reset(new frc::JoystickButton(driverJoystick.get(), 8));
+    drStartButton->WhenPressed(new Load(TheForce::SOLO_HEIGHT));
  
-    //drBackButton.reset(new frc::JoystickButton(driverJoystick.get(), 7));
+    drBackButton.reset(new frc::JoystickButton(driverJoystick.get(), 7));
+    drBackButton->WhenPressed(new Load(TheForce::WOOKIE_HEIGHT));
 
     //drRightBumper.reset(new frc::JoystickButton(driverJoystick.get(), 6));
     //drLeftBumper.reset(new frc::JoystickButton(driverJoystick.get(), 5));
-    //drRightStickBtn.reset(new frc::JoystickButton(driverJoystick.get(), 10));
+    drRightStickBtn.reset(new frc::JoystickButton(driverJoystick.get(), 10));
+    drRightStickBtn->WhenPressed(new Load(TheForce::EWOK_HEIGHT));
 
 
     // SmartDashboard Buttons
@@ -113,6 +119,7 @@ OI::OI() {
     frc::SmartDashboard::PutData("Gravitate: stop", new Gravitate(0));
     frc::SmartDashboard::PutData("Gravitate: up", new Gravitate(0.5));
     frc::SmartDashboard::PutData("Gravitate: down", new Gravitate(-0.5));
+
     frc::SmartDashboard::PutData("ToggleTractorBeam", new ToggleTractorBeam());
     frc::SmartDashboard::PutData("RetractTractorBeam", new RetractTractorBeam());
     frc::SmartDashboard::PutData("DeployTractorBeam", new DeployTractorBeam());

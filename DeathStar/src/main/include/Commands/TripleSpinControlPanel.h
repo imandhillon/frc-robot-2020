@@ -18,4 +18,12 @@ class TripleSpinControlPanel : public frc::Command {
   bool IsFinished() override;
   void End() override;
   void Interrupted() override;
+private:
+  bool MotorRunning;
+  double lastColorChangePos;
+  double initialPos;
+  int lastColor; 
+  double MAX_DELTA_ENCODER = 0;
+  double MAX_DISTANCE = 0;
+  int seenColors[4];
 };

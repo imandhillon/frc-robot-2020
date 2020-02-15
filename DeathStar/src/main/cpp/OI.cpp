@@ -80,7 +80,7 @@ OI::OI() {
 
     //Back Button
     opBackButton.reset(new frc::JoystickButton(operatorJoystick.get(), 7));
-    opBackButton->WhileHeld(new Grab());
+    opBackButton->WhenPressed(new TripleSpinControlPanel());
 
     //start Button - 
     opStartButton.reset(new frc::JoystickButton(operatorJoystick.get(), 8));

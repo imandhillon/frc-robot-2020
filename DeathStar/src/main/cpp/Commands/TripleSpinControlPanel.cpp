@@ -71,7 +71,7 @@ bool TripleSpinControlPanel::IsFinished() {
   if (
     //seenColors[Robot::warpDriveInverter -> BLUE] >= 7 &&
     //seenColors[Robot::warpDriveInverter -> RED] >= 7 &&
-    seenColors[Robot::warpDriveInverter -> GREEN] >= 7 &&
+    seenColors[Robot::warpDriveInverter -> GREEN] >= 7){
     //seenColors[Robot::warpDriveInverter -> YELLOW] >= 7){
     SPAMutil::Log("TripleSpinControlPanel", "All Colors Seen", SPAMutil::LOG_INFO);
     if(Robot::warpDriveInverter -> getPosition() - initialPos > MAX_DISTANCE){

@@ -51,7 +51,7 @@ void TheForce::InitDefaultCommand() {
 void TheForce::Periodic() {
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("TheForce", liftEncoder->GetDistance());
-    // YodaLift();
+     YodaLift();
 }
 
 // Put methods for controlling this subsystem
@@ -93,11 +93,11 @@ void TheForce::YodaLift()
 	   lError = lSetPoint - lEncVal;
 	   if(lError < BANGBANG_LO_SIDE)     // low side of deadband
 	   {
-		   lJoyX = -1. * m_BangBang_Speed;
+		   lJoyX =  1. * m_BangBang_Speed;
 	   }
 	   else if(lError > BANGBANG_HI_SIDE) // hi side of deadband
 	   {
-		   lJoyX = m_BangBang_Speed ;
+		   lJoyX = -1. * m_BangBang_Speed ;
 	   }
 	   else
 	   {
@@ -150,3 +150,5 @@ void TheForce::YodaLift()
     {
         m_aPosition = (double)liftEncoder->GetDistance();
     }
+
+

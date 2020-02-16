@@ -14,6 +14,7 @@
 #include "frc/commands/CommandGroup.h"
 #include "frc/commands/Subsystem.h"
 #include "Robot.h"
+#include "frc/commands/WaitCommand.h"
 
 /**
  *

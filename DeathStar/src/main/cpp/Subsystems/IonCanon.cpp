@@ -26,7 +26,7 @@ turretMotor.reset(new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushle
 domeServo.reset(new frc::Servo(5));
 AddChild("DomeServo", domeServo);
 
-turretReferenceSwitch.reset(new frc::DigitalInput(5));
+turretReferenceSwitch.reset(new frc::DigitalInput(4));
 AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
 /*turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));

@@ -39,6 +39,7 @@
 #include "Commands/TripleSpinControlPanel.h"
 #include "Commands/LoadItUp.h"
 #include "Commands/CeaseShooter.h"
+#include "Commands/StopLockNLoad.h"
 
 
 
@@ -98,20 +99,21 @@ OI::OI() {
   
     drXButton.reset(new frc::JoystickButton(driverJoystick.get(), 3));
     drXButton->WhileHeld(new Fire());
+    drXButton->WhenReleased(new StopLockNLoad());
 
     drYButton.reset(new frc::JoystickButton(driverJoystick.get(), 4));
     drYButton->WhenPressed(new CeaseShooter());
 
     drStartButton.reset(new frc::JoystickButton(driverJoystick.get(), 8));
-    drStartButton->WhenPressed(new Gravitate(TheForce::SOLO_HEIGHT,0.5));
+    drStartButton->WhenPressed(new Gravitate(TheForce::SOLO_HEIGHT,0.75));
  
     drBackButton.reset(new frc::JoystickButton(driverJoystick.get(), 7));
-    drBackButton->WhenPressed(new Gravitate(TheForce::WOOKIE_HEIGHT,0.5));
+    drBackButton->WhenPressed(new Gravitate(TheForce::WOOKIE_HEIGHT,0.75));
 
     //drRightBumper.reset(new frc::JoystickButton(driverJoystick.get(), 6));
     //drLeftBumper.reset(new frc::JoystickButton(driverJoystick.get(), 5));
     drRightStickBtn.reset(new frc::JoystickButton(driverJoystick.get(), 10));
-    drRightStickBtn->WhenPressed(new Gravitate(TheForce::EWOK_HEIGHT,0.3));
+    drRightStickBtn->WhenPressed(new Gravitate(TheForce::EWOK_HEIGHT,0.5));
 
 
     // SmartDashboard Buttons

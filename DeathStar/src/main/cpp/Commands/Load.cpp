@@ -44,13 +44,13 @@ void Load::Execute() {
 // Make this return true when this Command no longer needs to run execute()
 bool Load::IsFinished() {
     // while held never finishes
-    return false;
+    return true;
     //return IsTimedOut();
 }
 
 // Called once after isFinished returns true
 void Load::End() {
-    Robot::plasmaTank->StopLoader();
+    //Robot::plasmaTank->StopLoader();
 }
 
 // Called when another command which requires one or more of the same

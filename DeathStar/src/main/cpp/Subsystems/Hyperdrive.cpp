@@ -101,6 +101,7 @@ void Hyperdrive::InitDefaultCommand()
 void Hyperdrive::Periodic()
 {
     //UpdateOdometry();
+    
 }
 
 
@@ -120,9 +121,28 @@ frc::Rotation2d Hyperdrive::GetAngle() const
 
 void Hyperdrive::DriveArcade(std::shared_ptr<frc::Joystick> j)
 {
+
     float x = j->GetX();            // raw 0
     float y = j->GetY();            // raw 1
-    differentialDrive->ArcadeDrive(x, -y, true);
+    // rev going to fwd
+    if(m_Yspeed < 0. && y > m_Yspeed) {
+	   m_Yspeed = SPAMutil::RateLimitPWM(m_Yspeed, y, kRateLimit);
+    } 
+    else if(m_Yspeed > 0. && y < m_Yspeed) {
+	   m_Yspeed = SPAMutil::RateLimitPWM(m_Yspeed, y, kRateLimit);  
+    }
+    else if(y > -0.078 && y < 0.078) {
+	   m_Yspeed = 0; 
+    }
+    else {
+       m_Yspeed = y; 
+    }
+    
+    //differentialDrive->ArcadeDrive(x, -y, true);
+    differentialDrive->ArcadeDrive(x, -m_Yspeed, true);
+
+    frc::SmartDashboard::PutNumber("joyY", y);
+    frc::SmartDashboard::PutNumber("joyLPY", m_Yspeed);
 }
 
 

@@ -20,7 +20,17 @@ LimeAide::LimeAide() : frc::Subsystem("LimeAide") {
 }
 
 void LimeAide::InitDefaultCommand() {}
-void LimeAide::Periodic() {}
+void LimeAide::Periodic() {
+
+  LimeRoxTrack();
+
+        frc::SmartDashboard::PutNumber("targetX",getLimeRoxX() );
+        frc::SmartDashboard::PutNumber("targetY",getLimeRoxY() );
+        frc::SmartDashboard::PutNumber("targetA",getLimeRoxA() );
+        frc::SmartDashboard::PutNumber("targetSkew",getLimeRoxS() );
+
+        frc::SmartDashboard::PutBoolean("IseeTrgt", getLimeRoxInView());
+}
 
 void LimeAide::LimeRoxTrack()
 {

@@ -81,6 +81,7 @@
     "__debug": "cpp",
     "__functional_base": "cpp",
     "__nullptr": "cpp",
-    "__tuple": "cpp"
+    "__tuple": "cpp",
+    "math": "cpp"
   }
 }

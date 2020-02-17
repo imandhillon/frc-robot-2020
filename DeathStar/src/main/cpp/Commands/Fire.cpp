@@ -14,7 +14,7 @@ Fire::Fire(): frc::CommandGroup() {
     //AddSequential(new frc::WaitCommand(.25));
     //AddSequential(new LockNLoad(PlasmaTank::kLoaderSpeed));
     AddSequential(new Load(PlasmaTank::kLoaderSpeed));
-    AddSequential(new frc::WaitCommand(.25));
+    AddSequential(new frc::WaitCommand(.75));
     AddSequential(new Lock(PlasmaTank::kConveyorSpeed));
     
     

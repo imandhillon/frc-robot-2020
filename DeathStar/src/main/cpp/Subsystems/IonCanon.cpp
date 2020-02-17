@@ -14,6 +14,8 @@
 #include "Commands/AimCamera.h"
 #include "Commands/AimJoystick.h"
 
+#include "frc/smartdashboard/SmartDashboard.h"
+
 constexpr double kShooterMaxCurrent = 40.0;
 constexpr double kTurretMaxCurrent = 20.0;
 
@@ -29,11 +31,14 @@ AddChild("DomeServo", domeServo);
 turretReferenceSwitch.reset(new frc::DigitalInput(4));
 AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
+// Set up encoders
 /*turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
 AddChild("TurretQuadEncoder", turretQuadEncoder);
 turretQuadEncoder->SetDistancePerPulse(1.0);
 turretQuadEncoder->SetPIDSourceType(frc::PIDSourceType::kRate);
 */
+m_shooter1Encoder.reset(new rev::CANEncoder(*m_shooter1Encoder));
+turretQuadEncoder.reset(new rev::CANEncoder(*turretQuadEncoder));
 
 loadedSensor.reset(new frc::DigitalInput(12));
 AddChild("LoadedSensor", loadedSensor);
@@ -45,7 +50,15 @@ AddChild("LoadedSensor", loadedSensor);
     
     // Set the shooter motor follower
     shooterMotor2->Follow(*shooterMotor1);
-}
+ 
+    uint32_t lcpr = m_shooter1Encoder->GetCountsPerRevolution();
+    m_shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
+
+    uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
+    turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
+
+} 
+
 
 void IonCanon::InitDefaultCommand() {
 
@@ -55,7 +68,8 @@ void IonCanon::InitDefaultCommand() {
 
 void IonCanon::Periodic() {
     // Put code here to be run every loop
-
+    frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
+    frc::SmartDashboard::PutNumber("turretPos",turretQuadEncoder->GetPosition() );
 }
 
 // Shooter 

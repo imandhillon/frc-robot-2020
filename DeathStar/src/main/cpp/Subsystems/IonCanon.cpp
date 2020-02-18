@@ -32,13 +32,16 @@ turretReferenceSwitch.reset(new frc::DigitalInput(4));
 AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
 // Set up encoders
-/*turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
-AddChild("TurretQuadEncoder", turretQuadEncoder);
-turretQuadEncoder->SetDistancePerPulse(1.0);
-turretQuadEncoder->SetPIDSourceType(frc::PIDSourceType::kRate);
-*/
-m_shooter1Encoder.reset(new rev::CANEncoder(*m_shooter1Encoder));
-turretQuadEncoder.reset(new rev::CANEncoder(*turretQuadEncoder));
+//turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
+//AddChild("TurretQuadEncoder", turretQuadEncoder);
+//turretQuadEncoder->SetDistancePerPulse(1.0);
+//turretQuadEncoder->SetPIDSourceType(frc::PIDSourceType::kRate);
+//
+m_shooter1Encoder.reset(new rev::CANEncoder(*shooterMotor1));
+turretQuadEncoder.reset(new rev::CANEncoder(*turretMotor));
+
+// m_encoder.reset(new rev::CANEncoder(*leftElevatorMotor));
+    
 
 loadedSensor.reset(new frc::DigitalInput(12));
 AddChild("LoadedSensor", loadedSensor);
@@ -51,12 +54,12 @@ AddChild("LoadedSensor", loadedSensor);
     // Set the shooter motor follower
     shooterMotor2->Follow(*shooterMotor1);
  
-    uint32_t lcpr = m_shooter1Encoder->GetCountsPerRevolution();
-    m_shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
-
-    uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
-    turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
-
+    //uint32_t lcpr = m_shooter1Encoder->GetCountsPerRevolution();
+    //m_shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
+     m_shooter1Encoder->SetPositionConversionFactor(1.0); 
+    //uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
+    //turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
+      turretQuadEncoder->SetPositionConversionFactor(1.0);
 } 
 
 
@@ -70,6 +73,9 @@ void IonCanon::Periodic() {
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",turretQuadEncoder->GetPosition() );
+    frc::SmartDashboard::PutNumber("domePos",m_domeServo);
+
+    
 }
 
 // Shooter 
@@ -106,7 +112,8 @@ void IonCanon::AimDown()
 }
 
 void IonCanon::SetServo(float value){
-    domeServo->Set(value / 2 + 0.5);
+    m_domeServo = value / 2 + 0.5;
+    domeServo->Set(m_domeServo);
 }
 
 void IonCanon::AimStop()

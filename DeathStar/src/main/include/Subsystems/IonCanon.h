@@ -55,6 +55,8 @@ public:
 	static constexpr double kTGearRatio = 5.;
 	static constexpr units::meter_t kTurretRadius = 6.0_in;
 
+	float m_domeServo;
+
 	IonCanon();
 	void InitDefaultCommand() override;
 	void Periodic() override;
@@ -79,4 +81,17 @@ public:
 	// Burn CANSparkMAX settings on motors
 	void Burn();
 };
+
+//dome fully extended setting 0.
+//           retractd setting  0.5
+// shooter pwr 0.25  speed 1360
+//             0.45        2537
+//             0.65        3508
+//             0.90        4750
+//             
+// turret  ~90 deg    reading -106
+//          0 deg               0
+//         ~-90deg             112
+//
+
 

@@ -4,7 +4,7 @@
 constexpr double kDeadband = 0.1;
 
 AimJoystick::AimJoystick(): frc::Command() {
-	Requires(Robot::ionCanon.get());
+	Requires(Robot::ionCannon.get());
     //SetInterruptible(false);
 }
 
@@ -24,22 +24,22 @@ void AimJoystick::Execute() {
 
     // Move the turret left/right
     if (x > 0) {
-        Robot::ionCanon->AimRight();
+        Robot::ionCannon->AimRight();
     } else if (x < 0) {
-        Robot::ionCanon->AimLeft();
+        Robot::ionCannon->AimLeft();
     } else {
-        Robot::ionCanon->StopTurret();
+        Robot::ionCannon->StopTurret();
     }
 
     // Move the dome up/down
-    Robot::ionCanon->SetServo(y);
+    Robot::ionCannon->SetServo(y);
     /*
     if (y > 0) {
-        Robot::ionCanon->AimUp();
+        Robot::ionCannon->AimUp();
     } else if (y < 0) {
-        Robot::ionCanon->AimDown();
+        Robot::ionCannon->AimDown();
     } else {
-        Robot::ionCanon->StopDome();
+        Robot::ionCannon->StopDome();
     }
     */
 }
@@ -51,7 +51,7 @@ bool AimJoystick::IsFinished() {
 
 // Called once after isFinished returns true
 void AimJoystick::End() {
-    Robot::ionCanon->AimStop();
+    Robot::ionCannon->AimStop();
 }
 
 // Called when another command which requires one or more of the same

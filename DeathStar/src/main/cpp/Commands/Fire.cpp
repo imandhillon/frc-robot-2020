@@ -10,7 +10,7 @@
 
 
 Fire::Fire(): frc::CommandGroup() {
-    AddSequential(new SpinShooter(IonCanon::kShooterSpeed));
+    AddSequential(new SpinShooter(IonCannon::kShooterSpeed));
     //AddSequential(new frc::WaitCommand(.25));
     //AddSequential(new LockNLoad(PlasmaTank::kLoaderSpeed));
     AddSequential(new Load(PlasmaTank::kLoaderSpeed));

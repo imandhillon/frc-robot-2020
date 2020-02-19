@@ -8,7 +8,7 @@ Burn::Burn(): frc::Command() {
 
     // only the ones that have CANSparkMAX
     Requires(Robot::hyperdrive.get());
-	Requires(Robot::ionCanon.get());
+	Requires(Robot::ionCannon.get());
     Requires(Robot::plasmaTank.get());
     //Requires(Robot::theForce.get());
     Requires(Robot::tractorBeam.get());
@@ -19,7 +19,7 @@ Burn::Burn(): frc::Command() {
 // Called just before this Command runs the first time
 void Burn::Initialize() {
     Robot::hyperdrive->Burn();
-    Robot::ionCanon->Burn();
+    Robot::ionCannon->Burn();
     Robot::plasmaTank->Burn();
     Robot::tractorBeam->Burn();
 

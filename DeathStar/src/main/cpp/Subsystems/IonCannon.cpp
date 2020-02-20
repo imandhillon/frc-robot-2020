@@ -115,15 +115,17 @@ void IonCannon::AimCam(){
     if (x > 0){
         if (turretQuadEncoder->GetPosition() <= kLowLimit)
             turretMotor->StopMotor();
-        else
-            turretMotor ->Set(-x);
+            x = 0;
+        //else
+            //turretMotor ->Set(-x);
     if (x < 0){
         if (turretQuadEncoder->GetPosition() >= kHighLimit)
             turretMotor->StopMotor();
-        else
-            turretMotor ->Set(-x);
+            x = 0;
+        //else
+            //turretMotor ->Set(-x);
     }
-
+    turretMotor ->Set(-x);
         
     }
 	

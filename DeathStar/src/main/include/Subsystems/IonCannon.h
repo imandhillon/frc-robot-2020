@@ -52,7 +52,7 @@ public:
 	static constexpr double kDomeSpeed = 0.5;
 
 	static constexpr double kCamTolerance = 3.;
-	static constexpr double kCamPower = 0.2;
+	static constexpr double kCamPower = 0.1;
 	static constexpr double kCamFriction = 0; //0.07
 	static constexpr double kCamLimit = .76;//0.38;
  

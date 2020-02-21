@@ -50,7 +50,7 @@ public:
 	static constexpr double kShooterSpeed = 0.45;
 	static constexpr double kShooterIdle = 0.2;
 	static constexpr double kTurretSpeed = 0.4;
-	static constexpr double kTurretXFactor = 0.6;  // what we multiply the targeting X by to move the position
+	static constexpr double kTurretXFactor = 1.0;  // what we multiply the targeting X by to move the position
 	static constexpr double kDomeSpeed = 0.5;
 
 	static constexpr double kCamTolerance = 3.;

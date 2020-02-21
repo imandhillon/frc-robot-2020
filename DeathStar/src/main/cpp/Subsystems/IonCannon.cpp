@@ -13,7 +13,6 @@
 
 #include "Commands/AimCamera.h"
 #include "Commands/AimJoystick.h"
-
 #include "frc/smartdashboard/SmartDashboard.h"
 
 constexpr double kShooterMaxCurrent = 40.0;
@@ -40,8 +39,34 @@ AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 m_shooter1Encoder.reset(new rev::CANEncoder(*shooterMotor1));
 turretQuadEncoder.reset(new rev::CANEncoder(*turretMotor));
 
-// m_encoder.reset(new rev::CANEncoder(*leftElevatorMotor));
-    
+/*
+ * PIDController objects are commanded to a set point using the
+* SetReference() method.
+*
+* The first parameter is the value of the set point, whose units vary
+* depending on the control type set in the second parameter.
+*
+* The second parameter is the control type can be set to one of four
+* parameters:
+*  rev::ControlType::kDutyCycle
+*  rev::ControlType::kPosition
+*  rev::ControlType::kVelocity
+*  rev::ControlType::kVoltage
+*/
+// turrretController.reset(new rev::CANPIDController(*turretMotor));
+// set PID coefficients
+//    kP  = 0.045;   // DeepSpaceElevator
+//    kI  = 0.00; 
+//    kD  = 0.4; 
+//    kIz = 0.90; 
+//    kFF = 0.0055; 
+//mturretController -> SetP(kP);
+//turretController -> SetI(kI);
+//turretController -> SetD(kD);
+//turretController -> SetIZone(kIz);
+//turretController -> SetFF(kFF);
+//turretController -> SetOutputRange(kMinOutput, kMaxOutput);
+//
 
 loadedSensor.reset(new frc::DigitalInput(12));
 AddChild("LoadedSensor", loadedSensor);
@@ -74,13 +99,35 @@ void IonCannon::Periodic() {
     AimCam();
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
-    frc::SmartDashboard::PutNumber("turretPos",turretQuadEncoder->GetPosition() );
-    frc::SmartDashboard::PutNumber("domePos",m_domeServo);
-
-    
+    frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
+    frc::SmartDashboard::PutNumber("domePos",GetDomePosition());
 }
 
-void IonCannon::AimCam(){
+void IonCannon::AimCamPosition() {
+    if (Robot::limeAide->getLimeRoxInView()) {
+		double tx = Robot::limeAide->getLimeRoxX();
+        double dx = GetTurretPosition() - (tx * kTurretXFactor);
+        if (dx < kTurretLowLimit)
+            dx = kTurretLowLimit;
+        if (dx > kTurretHighLimit)
+            dx = kTurretHighLimit;
+        turretMotor->Set(dx);
+   // use the CAN PID to replace the turret->Set()
+   // rev::CANError rev::CANPIDController::SetReference(
+   //     double value, 
+   //     rev::ControlType ctrl, 
+   //     int pidSlot = 0, 
+   //     double arbFeedforward = (0.0)                )
+   // turretController->SetReference(dx, rev::ControlType::kPosition);
+
+    }
+    else {
+        AimStop();
+    }
+  
+}
+
+void IonCannon::AimCam() {
     float x = 0.;            // raw 0
     bool mMoving = false;
 
@@ -113,24 +160,24 @@ void IonCannon::AimCam(){
 			turretMotor->StopMotor();
 			mMoving = false;
 	}	
-/*
-    if (x > 0){
-        if (turretQuadEncoder->GetPosition() <= kLowLimit)
-            turretMotor->StopMotor();
-            x = 0;
-    }
-    if (x < 0){
-        if (turretQuadEncoder->GetPosition() >= kHighLimit)
+  /* why does turretQuadEncoder->GetPosition() return -90?
+    if (x > 0) {
+        if (turretQuadEncoder->GetPosition() <= kTurretLowLimit)
             turretMotor->StopMotor();
             x = 0;
         //else
             //turretMotor ->Set(-x);
     }
-    */
+    if (x < 0){
+        if (turretQuadEncoder->GetPosition() >= kTurretHighLimit)
+            turretMotor->StopMotor();
+            x = 0;
+        //else
+            //turretMotor ->Set(-x);
+    }
+  */
     turretMotor ->Set(-x);
-      frc::SmartDashboard::PutNumber("turretSpd",x );   
-    
-	
+    frc::SmartDashboard::PutNumber("turretSpd",x );
 	
 }
 
@@ -189,3 +236,18 @@ void IonCannon::Burn()
     shooterMotor2->BurnFlash();
     turretMotor->BurnFlash();
 }
+
+double IonCannon::GetTurretPosition()
+{
+    double pos = turretQuadEncoder->GetPosition();
+
+    return pos;
+}
+
+double IonCannon::GetDomePosition()
+{
+    double pos = domeServo->GetPosition();
+
+    return pos;
+}
+

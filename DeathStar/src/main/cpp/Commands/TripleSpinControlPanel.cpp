@@ -60,7 +60,7 @@ void TripleSpinControlPanel::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool TripleSpinControlPanel::IsFinished() { 
-  double deltaEncoder = Robot::warpDriveInverter -> getPosition(); - lastColorChangePos;
+  //double deltaEncoder = Robot::warpDriveInverter -> getPosition(); - lastColorChangePos;
   /*
   if (fabs(deltaEncoder) > MAX_DELTA_ENCODER){
     //SPAMutil::Log("TripleSpinControlPanel", "Colors not changing! Is the robot on the wheel?", SPAMutil::LOG_ERR);

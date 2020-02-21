@@ -17,6 +17,7 @@
 #include "frc/Encoder.h"
 #include "frc/Servo.h"
 #include "rev/CANSparkMax.h"
+#include "rev/CANPIDController.h"
 #include <units/units.h>
 #include <wpi/math>
 #include "SPAMutil.h"
@@ -33,16 +34,17 @@ private:
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities
 
-std::shared_ptr<rev::CANSparkMax> shooterMotor1;
-std::shared_ptr<rev::CANSparkMax> shooterMotor2;
-std::shared_ptr<rev::CANSparkMax> turretMotor;
-std::shared_ptr<frc::Servo> domeServo;
-std::shared_ptr<frc::DigitalInput> turretReferenceSwitch;
-//std::shared_ptr<frc::Encoder> turretQuadEncoder;
-std::shared_ptr<rev::CANEncoder> m_shooter1Encoder;
-std::shared_ptr<rev::CANEncoder> turretQuadEncoder;
+	std::shared_ptr<rev::CANSparkMax> shooterMotor1;
+	std::shared_ptr<rev::CANSparkMax> shooterMotor2;
+	std::shared_ptr<rev::CANSparkMax> turretMotor;
+	std::shared_ptr<frc::Servo> domeServo;
+	std::shared_ptr<frc::DigitalInput> turretReferenceSwitch;
+	std::shared_ptr<rev::CANEncoder> shooter1Encoder;
+	std::shared_ptr<rev::CANEncoder> turretQuadEncoder;
+	std::shared_ptr<rev::CANPIDController> turretPIDController;
+	std::shared_ptr<rev::CANPIDController> shooterPIDController;
 
-std::shared_ptr<frc::DigitalInput> loadedSensor;
+	std::shared_ptr<frc::DigitalInput> loadedSensor;
 
 	float m_domeServo = 0.0;
 
@@ -86,6 +88,7 @@ public:
 	void AimStop();
 
 	double GetTurretPosition();
+	void SetTurretPosition(double position);
 	void StopTurret();
 
 	double GetDomePosition();

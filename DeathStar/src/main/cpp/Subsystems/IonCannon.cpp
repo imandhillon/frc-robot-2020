@@ -14,6 +14,7 @@
 #include "Commands/AimCamera.h"
 #include "Commands/AimJoystick.h"
 #include "frc/smartdashboard/SmartDashboard.h"
+#include <sstream>
 
 constexpr double kShooterMaxCurrent = 40.0;
 constexpr double kTurretMaxCurrent = 20.0;
@@ -21,29 +22,21 @@ constexpr double kTurretMaxCurrent = 20.0;
 
 IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
 
-shooterMotor1.reset(new rev::CANSparkMax(12, rev::CANSparkMax::MotorType::kBrushless));
-shooterMotor2.reset(new rev::CANSparkMax(13, rev::CANSparkMax::MotorType::kBrushless));
-turretMotor.reset(new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushless));
-domeServo.reset(new frc::Servo(5));
-AddChild("DomeServo", domeServo);
+    shooterMotor1.reset(new rev::CANSparkMax(12, rev::CANSparkMax::MotorType::kBrushless));
+    shooterMotor2.reset(new rev::CANSparkMax(13, rev::CANSparkMax::MotorType::kBrushless));
+    turretMotor.reset(new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushless));
+    domeServo.reset(new frc::Servo(5));
+    AddChild("DomeServo", domeServo);
 
-turretReferenceSwitch.reset(new frc::DigitalInput(4));
-AddChild("TurretReferenceSwitch", turretReferenceSwitch);
+    turretReferenceSwitch.reset(new frc::DigitalInput(4));
+    AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
-// Set up encoders
-//turretQuadEncoder.reset(new frc::Encoder(6, 7, false, frc::Encoder::k4X));
-//AddChild("TurretQuadEncoder", turretQuadEncoder);
-//turretQuadEncoder->SetDistancePerPulse(1.0);
-//turretQuadEncoder->SetPIDSourceType(frc::PIDSourceType::kRate);
-//
-m_shooter1Encoder.reset(new rev::CANEncoder(*shooterMotor1));
-turretQuadEncoder.reset(new rev::CANEncoder(*turretMotor));
+    // Set up encoders
+    shooter1Encoder.reset(new rev::CANEncoder(*shooterMotor1));
+    turretQuadEncoder.reset(new rev::CANEncoder(*turretMotor));
 
-// m_encoder.reset(new rev::CANEncoder(*leftElevatorMotor));
-    
-
-loadedSensor.reset(new frc::DigitalInput(12));
-AddChild("LoadedSensor", loadedSensor);
+    //loadedSensor.reset(new frc::DigitalInput(12));
+    //AddChild("LoadedSensor", loadedSensor);
 
     // limit current
     shooterMotor1->SetSmartCurrentLimit(kShooterMaxCurrent);
@@ -53,24 +46,63 @@ AddChild("LoadedSensor", loadedSensor);
     // Set the shooter motor follower
     shooterMotor2->Follow(*shooterMotor1);
  
-    //uint32_t lcpr = m_shooter1Encoder->GetCountsPerRevolution();
-    //m_shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
-     m_shooter1Encoder->SetPositionConversionFactor(1.0); 
+    //uint32_t lcpr = shooter1Encoder->GetCountsPerRevolution();
+    //shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
+    //shooter1Encoder->SetPositionConversionFactor(1.0);
+
+    // initialize to zero, range is +/- 90 degrees
+    //turretQuadEncoder->SetPosition(0);
+    
     //uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
     //turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
-      turretQuadEncoder->SetPositionConversionFactor(1.0);
+    //turretQuadEncoder->SetPositionConversionFactor(1.0);
+
+    /**
+     * In order to use PID functionality for a controller, a CANPIDController object
+     * is constructed by calling the GetPIDController() method on an existing
+     * CANSparkMax object
+     * set PID coefficients
+     */
+
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
+     * in the SPARK MAX to their factory default state. If no argument is passed, these
+     * parameters will not persist between power cycles
+     */
+    //m_motor.RestoreFactoryDefaults();
+  // default velocity PID coefficients
+  double kvP = 6e-5, kvI = 1e-6, kvD = 0, kvIz = 0, kvFF = 0.000015, kvMaxOutput = 1.0, kvMinOutput = -1.0;
+    shooterPIDController.reset(new rev::CANPIDController(*shooterMotor1));
+    shooterPIDController->SetP(kvP);
+    shooterPIDController->SetI(kvI);
+    shooterPIDController->SetD(kvD);
+    shooterPIDController->SetIZone(kvIz);
+    shooterPIDController->SetFF(kvFF);
+    shooterPIDController->SetOutputRange(kvMinOutput, kvMaxOutput);
+
+      // default Position PID coefficients
+  double kpP = 0.1, kpI = 1e-4, kpD = 1, kpIz = 0, kpFF = 0, kpMaxOutput = 1, kpMinOutput = -1;
+    turretPIDController.reset(new rev::CANPIDController(*turretMotor));
+    turretPIDController->SetP(kpP);
+    turretPIDController->SetI(kpI);
+    turretPIDController->SetD(kpD);
+    turretPIDController->SetIZone(kpIz);
+    turretPIDController->SetFF(kpFF);
+    turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
+
+
 } 
 
 
 void IonCannon::InitDefaultCommand() {
 
-   // SetDefaultCommand(new AimCamera());
+    //SetDefaultCommand(new AimCamera());
     SetDefaultCommand(new AimJoystick());
 }
 
 void IonCannon::Periodic() {
     // Put code here to be run every loop
-    frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
+    frc::SmartDashboard::PutNumber("shooterSpd",shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
     frc::SmartDashboard::PutNumber("domePos",GetDomePosition());
 }
@@ -83,9 +115,14 @@ void IonCannon::AimCamPosition() {
             dx = kTurretLowLimit;
         if (dx > kTurretHighLimit)
             dx = kTurretHighLimit;
-        turretMotor->Set(dx);
+        frc::SmartDashboard::PutNumber("target x",tx);
+        frc::SmartDashboard::PutNumber("get turret position",GetTurretPosition());
+        frc::SmartDashboard::PutNumber("set turret position",dx);
+
+        //SetTurretPosition(dx);
     }
     else {
+        frc::SmartDashboard::PutNumber("stop turret ", 0);
         AimStop();
     }
 }
@@ -202,13 +239,107 @@ double IonCannon::GetTurretPosition()
 {
     double pos = turretQuadEncoder->GetPosition();
 
+    std::stringstream ss;
+    ss << "GetTurretPosition() == " << pos << std::endl;
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
+
     return pos;
+}
+
+void IonCannon::SetTurretPosition(double position)
+{
+    std::stringstream ss;
+    ss << "SetTurretPosition(" << position << ")" << std::endl;
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
+
+    turretQuadEncoder->SetPosition(position);
 }
 
 double IonCannon::GetDomePosition()
 {
     double pos = domeServo->GetPosition();
 
+    std::stringstream ss;
+    ss << "GetDomePosition() == " << pos << std::endl;
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
+
     return pos;
 }
 
+
+static void SetPidStuff()
+{
+        // read setpoint from joystick and scale by max rpm
+
+// velocity PID
+/*
+    double SetPoint = 0.0;// = MaxRPM*m_stick.GetY();
+    if (m_stick.GetRawButton(1)) {
+      SetPoint = 100;
+    } else if (m_stick.GetRawButton(2)) {
+      SetPoint = 500;
+    } else if (m_stick.GetRawButton(3)) {
+      SetPoint = 750;
+    } else if (m_stick.GetRawButton(4)) {
+      SetPoint = 2500;
+    } else {
+      SetPoint = 0;
+    }
+    */
+    /**
+     * PIDController objects are commanded to a set point using the 
+     * SetReference() method.
+     * 
+     * The first parameter is the value of the set point, whose units vary
+     * depending on the control type set in the second parameter.
+     * 
+     * The second parameter is the control type can be set to one of four 
+     * parameters:
+     *  rev::ControlType::kDutyCycle
+     *  rev::ControlType::kPosition
+     *  rev::ControlType::kVelocity
+     *  rev::ControlType::kVoltage
+     */
+    
+    //m_pidController.SetReference(SetPoint, rev::ControlType::kVelocity);
+
+    //frc::SmartDashboard::PutNumber("SetPoint", SetPoint);
+    //frc::SmartDashboard::PutNumber("ProcessVariable", m_encoder.GetVelocity());
+    
+
+}
+
+static void anotherone()
+{
+      // Position PID coefficients
+  double kP = 0.1, kI = 1e-4, kD = 1, kIz = 0, kFF = 0, kMaxOutput = 1, kMinOutput = -1;
+
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
+     * in the SPARK MAX to their factory default state. If no argument is passed, these
+     * parameters will not persist between power cycles
+     */
+    //m_motor.RestoreFactoryDefaults();
+
+    /**
+     * PIDController objects are commanded to a set point using the 
+     * SetReference() method.
+     * 
+     * The first parameter is the value of the set point, whose units vary
+     * depending on the control type set in the second parameter.
+     * 
+     * The second parameter is the control type can be set to one of four 
+     * parameters:
+     *  rev::ControlType::kDutyCycle
+     *  rev::ControlType::kPosition
+     *  rev::ControlType::kVelocity
+     *  rev::ControlType::kVoltage
+     */
+    //m_pidController.SetReference(rotations, rev::ControlType::kPosition);
+    
+    //frc::SmartDashboard::PutNumber("SetPoint", rotations);
+    //frc::SmartDashboard::PutNumber("ProcessVariable", m_encoder.GetPosition());
+
+
+
+}

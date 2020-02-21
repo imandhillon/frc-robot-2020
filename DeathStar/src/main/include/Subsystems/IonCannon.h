@@ -44,9 +44,20 @@ private:
 	std::shared_ptr<rev::CANPIDController> turretPIDController;
 	std::shared_ptr<rev::CANPIDController> shooterPIDController;
 
+
 	std::shared_ptr<frc::DigitalInput> loadedSensor;
 
 	float m_domeServo = 0.0;
+//
+// CanSparkMax PID coefficients
+//  double kP ;
+//	double kI ; 
+//	double kD ; 
+//	double kIz ;
+//	double kFF ; 
+//	double kMaxOutput; 
+//  double kMinOutput;
+
 
 public:
 	static constexpr double kShooterSpeed = 0.45;
@@ -56,7 +67,7 @@ public:
 	static constexpr double kDomeSpeed = 0.5;
 
 	static constexpr double kCamTolerance = 3.;
-	static constexpr double kCamPower = 0.01;
+	static constexpr double kCamPower = 0.05;
 	static constexpr double kCamFriction = 0; //0.07
 	static constexpr double kCamLimit = .76;//0.38;
  

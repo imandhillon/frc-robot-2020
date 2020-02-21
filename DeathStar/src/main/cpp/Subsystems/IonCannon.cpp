@@ -101,6 +101,8 @@ void IonCannon::InitDefaultCommand() {
 }
 
 void IonCannon::Periodic() {
+
+    AimCam();
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
@@ -125,6 +127,7 @@ void IonCannon::AimCamPosition() {
         frc::SmartDashboard::PutNumber("stop turret ", 0);
         AimStop();
     }
+  
 }
 
 void IonCannon::AimCam() {
@@ -160,7 +163,7 @@ void IonCannon::AimCam() {
 			turretMotor->StopMotor();
 			mMoving = false;
 	}	
-
+  /* why does turretQuadEncoder->GetPosition() return -90?
     if (x > 0) {
         if (turretQuadEncoder->GetPosition() <= kTurretLowLimit)
             turretMotor->StopMotor();
@@ -175,7 +178,9 @@ void IonCannon::AimCam() {
         //else
             //turretMotor ->Set(-x);
     }
+  */
     turretMotor ->Set(-x);
+    frc::SmartDashboard::PutNumber("turretSpd",x );
 	
 }
 

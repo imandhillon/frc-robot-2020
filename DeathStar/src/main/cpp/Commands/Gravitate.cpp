@@ -26,8 +26,7 @@ m_height = height;
 
 // Called just before this Command runs the first time
 void Gravitate::Initialize() {
-     Robot::theForce->m_LiftSetPoint   = m_height;
-     Robot::theForce->m_BangBang_Speed = m_speed;
+     Robot::theForce->SetLiftBangBang(m_height, m_speed);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -48,5 +47,5 @@ void Gravitate::End() {
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void Gravitate::Interrupted() {
-
+    End();
 }

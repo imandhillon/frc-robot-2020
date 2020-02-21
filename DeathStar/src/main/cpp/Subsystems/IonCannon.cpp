@@ -78,7 +78,15 @@ void IonCannon::Periodic() {
     
 }
 
-void IonCannon::AimCam(){
+void IonCannon::AimCamPosition() {
+    if (Robot::limeAide->getLimeRoxInView()) {
+    }
+    else {
+        AimStop();
+    }
+}
+
+void IonCannon::AimCam() {
     float x = 0.;            // raw 0
     bool mMoving = false;
 
@@ -112,12 +120,13 @@ void IonCannon::AimCam(){
 			mMoving = false;
 	}	
 
-    if (x > 0){
+    if (x > 0) {
         if (turretQuadEncoder->GetPosition() <= kLowLimit)
             turretMotor->StopMotor();
             x = 0;
         //else
             //turretMotor ->Set(-x);
+    }
     if (x < 0){
         if (turretQuadEncoder->GetPosition() >= kHighLimit)
             turretMotor->StopMotor();
@@ -126,9 +135,6 @@ void IonCannon::AimCam(){
             //turretMotor ->Set(-x);
     }
     turretMotor ->Set(-x);
-        
-    }
-	
 	
 }
 

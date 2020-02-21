@@ -44,12 +44,13 @@ std::shared_ptr<rev::CANEncoder> turretQuadEncoder;
 
 std::shared_ptr<frc::DigitalInput> loadedSensor;
 
-	float m_domeServo;
+	float m_domeServo = 0.0;
 
 public:
 	static constexpr double kShooterSpeed = 0.45;
 	static constexpr double kShooterIdle = 0.2;
 	static constexpr double kTurretSpeed = 0.4;
+	static constexpr double kTurretXFactor = 0.6;  // what we multiply the targeting X by to move the position
 	static constexpr double kDomeSpeed = 0.5;
 
 	static constexpr double kCamTolerance = 3.;
@@ -57,8 +58,8 @@ public:
 	static constexpr double kCamFriction = 0; //0.07
 	static constexpr double kCamLimit = .76;//0.38;
  
-	static constexpr double	kLowLimit = -90;//-106.64;
-	static constexpr double kHighLimit = 90;//112.43;
+	static constexpr double	kTurretLowLimit = -90;//-106.64;
+	static constexpr double kTurretHighLimit = 90;//112.43;
 
 	static constexpr units::meter_t kWheelRadius = 2.0_in;
 	static constexpr double kGearRatio = 1.;
@@ -84,7 +85,10 @@ public:
 
 	void AimStop();
 
+	double GetTurretPosition();
 	void StopTurret();
+
+	double GetDomePosition();
 	void StopDome();
 
 	void SetServo(float value);

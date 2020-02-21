@@ -13,7 +13,6 @@
 
 #include "Commands/AimCamera.h"
 #include "Commands/AimJoystick.h"
-
 #include "frc/smartdashboard/SmartDashboard.h"
 
 constexpr double kShooterMaxCurrent = 40.0;
@@ -72,14 +71,19 @@ void IonCannon::InitDefaultCommand() {
 void IonCannon::Periodic() {
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
-    frc::SmartDashboard::PutNumber("turretPos",turretQuadEncoder->GetPosition() );
-    frc::SmartDashboard::PutNumber("domePos",m_domeServo);
-
-    
+    frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
+    frc::SmartDashboard::PutNumber("domePos",GetDomePosition());
 }
 
 void IonCannon::AimCamPosition() {
     if (Robot::limeAide->getLimeRoxInView()) {
+		double tx = Robot::limeAide->getLimeRoxX();
+        double dx = GetTurretPosition() - (tx * kTurretXFactor);
+        if (dx < kTurretLowLimit)
+            dx = kTurretLowLimit;
+        if (dx > kTurretHighLimit)
+            dx = kTurretHighLimit;
+        turretMotor->Set(dx);
     }
     else {
         AimStop();
@@ -121,14 +125,14 @@ void IonCannon::AimCam() {
 	}	
 
     if (x > 0) {
-        if (turretQuadEncoder->GetPosition() <= kLowLimit)
+        if (turretQuadEncoder->GetPosition() <= kTurretLowLimit)
             turretMotor->StopMotor();
             x = 0;
         //else
             //turretMotor ->Set(-x);
     }
     if (x < 0){
-        if (turretQuadEncoder->GetPosition() >= kHighLimit)
+        if (turretQuadEncoder->GetPosition() >= kTurretHighLimit)
             turretMotor->StopMotor();
             x = 0;
         //else
@@ -193,3 +197,18 @@ void IonCannon::Burn()
     shooterMotor2->BurnFlash();
     turretMotor->BurnFlash();
 }
+
+double IonCannon::GetTurretPosition()
+{
+    double pos = turretQuadEncoder->GetPosition();
+
+    return pos;
+}
+
+double IonCannon::GetDomePosition()
+{
+    double pos = domeServo->GetPosition();
+
+    return pos;
+}
+

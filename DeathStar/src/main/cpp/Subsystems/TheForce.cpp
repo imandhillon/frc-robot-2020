@@ -106,28 +106,33 @@ void TheForce::YodaLift()
 	   liftMotor->Set(lJoyX);
 	   
 }
-    void TheForce::SetLiftWookie() // max
-    {
-       m_LiftSetPoint = WOOKIE_HEIGHT;
-    }
-    void TheForce::SetLiftEwok()   // home
-    {
-       m_LiftSetPoint = EWOK_HEIGHT;
-    }
-    void TheForce::SetLiftSolo()   // hang
-    {
-      // allow a vernier
-      std::shared_ptr<frc::Joystick> joyy = Robot::oi->getDriverJoystick();
-      double vernyY = -(joyy->GetRawAxis(5));	
-      vernyY *= 50.;
+void TheForce::SetLiftWookie() // max
+{
+    m_LiftSetPoint = WOOKIE_HEIGHT;
+}
+void TheForce::SetLiftEwok()   // home
+{
+   m_LiftSetPoint = EWOK_HEIGHT;
+}
+void TheForce::SetLiftSolo()   // hang
+{
+    // allow a vernier
+    std::shared_ptr<frc::Joystick> joyy = Robot::oi->getDriverJoystick();
+    double vernyY = -(joyy->GetRawAxis(5));	
+    vernyY *= 50.;
        
-       m_LiftSetPoint = SOLO_HEIGHT + vernyY;
+    m_LiftSetPoint = SOLO_HEIGHT + vernyY;
        
-    }
+}
 
      void TheForce::SetLiftHome()   // hang
     {
        m_LiftSetPoint = 5.;
+    }
+    void TheForce::SetLiftBangBang(double height, double speed)
+    {
+        m_BangBang_Speed = speed;
+        m_LiftSetPoint = height;
     }
 
     void TheForce::SetPosition()

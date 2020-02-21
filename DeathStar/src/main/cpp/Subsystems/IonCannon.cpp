@@ -66,10 +66,12 @@ AddChild("LoadedSensor", loadedSensor);
 void IonCannon::InitDefaultCommand() {
 
    // SetDefaultCommand(new AimCamera());
-    SetDefaultCommand(new AimJoystick());
+    //SetDefaultCommand(new AimJoystick());
 }
 
 void IonCannon::Periodic() {
+
+    AimCam();
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",m_shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",turretQuadEncoder->GetPosition() );
@@ -111,13 +113,12 @@ void IonCannon::AimCam(){
 			turretMotor->StopMotor();
 			mMoving = false;
 	}	
-
+/*
     if (x > 0){
         if (turretQuadEncoder->GetPosition() <= kLowLimit)
             turretMotor->StopMotor();
             x = 0;
-        //else
-            //turretMotor ->Set(-x);
+    }
     if (x < 0){
         if (turretQuadEncoder->GetPosition() >= kHighLimit)
             turretMotor->StopMotor();
@@ -125,9 +126,10 @@ void IonCannon::AimCam(){
         //else
             //turretMotor ->Set(-x);
     }
+    */
     turretMotor ->Set(-x);
-        
-    }
+      frc::SmartDashboard::PutNumber("turretSpd",x );   
+    
 	
 	
 }

@@ -71,6 +71,7 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
 
 
 void IonCannon::InitDefaultCommand() {
+    SPAMutil::Log("IonCannon", "InitDefaultCommand (aim joystick)", SPAMutil::LOG_DBG);
 
     //SetDefaultCommand(new AimCamera());
     SetDefaultCommand(new AimJoystick());
@@ -85,14 +86,15 @@ void IonCannon::Periodic() {
 
     frc::SmartDashboard::PutNumber("servo 1 angle", domeServo->GetAngle());
     frc::SmartDashboard::PutNumber("servo 2 angle", domeServo2->GetAngle());
-    frc::SmartDashboard::PutNumber("servo 1 pos", domeServo->GetPosition());
-    frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
+    //frc::SmartDashboard::PutNumber("servo 1 pos", domeServo->GetPosition());
+    //frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 
     //ShooterPidControl();
     //TurretPidControl();
 }
 
 void IonCannon::AimCamPosition() {
+    SPAMutil::Log("IonCannon", "AimCamPosition", SPAMutil::LOG_DBG);
     if (Robot::limeAide->getLimeRoxInView()) {
 		double tx = Robot::limeAide->getLimeRoxX();
         double dx = GetTurretPosition() - (tx * kTurretXFactor);
@@ -114,6 +116,7 @@ void IonCannon::AimCamPosition() {
 }
 
 void IonCannon::AimCam() {
+    SPAMutil::Log("IonCannon", "AimCam", SPAMutil::LOG_DBG);
     float x = 0.;            // raw 0
     bool mMoving = false;
 
@@ -170,31 +173,40 @@ void IonCannon::AimCam() {
 // Shooter 
 void IonCannon::SpinShooter(double speed)
 {
+    std::stringstream ss;
+    ss << "SpinShooter(" << speed << ")";
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
+
     shooterMotor1->Set(speed);
 }
 
 void IonCannon::StopShooter()
 {
+    SPAMutil::Log("IonCannon", "StopShooter", SPAMutil::LOG_DBG);
     shooterMotor1->StopMotor();
 }
 
 void IonCannon::AimLeft()
 {
-    turretMotor->Set(-kTurretSpeed);
+    SPAMutil::Log("IonCannon", "AimLeft", SPAMutil::LOG_DBG);
+    turretMotor->Set(kTurretSpeed);
 }
 void IonCannon::AimRight()
 {
-    turretMotor->Set(kTurretSpeed);
+    SPAMutil::Log("IonCannon", "AimRight", SPAMutil::LOG_DBG);
+    turretMotor->Set(-kTurretSpeed);
 }
 void IonCannon::AimUp()
 {
-    SetServo(GetTurretPosition() + 1);
+    SPAMutil::Log("IonCannon", "AimUp", SPAMutil::LOG_DBG);
+    SetDomePosition(GetDomePosition() - 1);
     //domeServo->SetSpeed(kDomeSpeed);
     //domeServo2->SetSpeed(-kDomeSpeed);
 }
 void IonCannon::AimDown()
 {
-    SetServo(GetTurretPosition() - 1);
+    SPAMutil::Log("IonCannon", "AimDown", SPAMutil::LOG_DBG);
+    SetDomePosition(GetDomePosition() + 1);
     //domeServo->SetSpeed(-kDomeSpeed);
     //domeServo2->SetSpeed(kDomeSpeed);
 }
@@ -203,6 +215,9 @@ void IonCannon::AimDown()
 // now this takes a value between 0 and 90 degrees
 void IonCannon::SetServo(float value)
 {
+    std::stringstream ss;
+    ss << "SetServo(" << value << ")";
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
 // on left servo (from behind the robot), 0 is down, shoots higher, 1 is up, shoots lower
     if (value > 90.0)
@@ -227,24 +242,28 @@ void IonCannon::SetServo(float value)
 
 void IonCannon::AimStop()
 {
+    SPAMutil::Log("IonCannon", "AimStop", SPAMutil::LOG_DBG);
     turretMotor->StopMotor();
-    domeServo->StopMotor();
-    domeServo2->StopMotor();
+    //domeServo->StopMotor();
+    //domeServo2->StopMotor();
 }
 void IonCannon::StopTurret()
 {
-        turretMotor->StopMotor();
+    SPAMutil::Log("IonCannon", "StopTurret", SPAMutil::LOG_DBG);
+    turretMotor->StopMotor();
 }
 
 void IonCannon::StopDome()
 {
-        domeServo->StopMotor();
-        domeServo2->StopMotor();
+    SPAMutil::Log("IonCannon", "StopDome", SPAMutil::LOG_DBG);
+    //domeServo->StopMotor();
+    //domeServo2->StopMotor();
 }
 
 // Burn CANSparkMAX settings on motors
 void IonCannon::Burn()
 {
+    SPAMutil::Log("IonCannon", "Burn", SPAMutil::LOG_DBG);
     shooterMotor1->BurnFlash();
     shooterMotor2->BurnFlash();
     turretMotor->BurnFlash();
@@ -255,7 +274,7 @@ double IonCannon::GetTurretPosition()
     double pos = turretQuadEncoder->GetPosition();
 
     std::stringstream ss;
-    ss << "GetTurretPosition() == " << pos << std::endl;
+    ss << "GetTurretPosition() == " << pos;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
     return pos;
@@ -264,7 +283,7 @@ double IonCannon::GetTurretPosition()
 void IonCannon::SetTurretPosition(double position)
 {
     std::stringstream ss;
-    ss << "SetTurretPosition(" << position << ")" << std::endl;
+    ss << "SetTurretPosition(" << position << ")" ;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
     turretQuadEncoder->SetPosition(position);
@@ -272,13 +291,30 @@ void IonCannon::SetTurretPosition(double position)
 
 double IonCannon::GetDomePosition()
 {
-    double pos = domeServo->GetPosition();
+    double pos = domeServo->GetAngle();
 
     std::stringstream ss;
-    ss << "GetDomePosition() == " << pos << std::endl;
+    ss << "GetDomePosition() == " << pos;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
     return pos;
+}
+
+// this takes a value between 0 and 90 degrees
+void IonCannon::SetDomePosition(double value)
+{
+    std::stringstream ss;
+    ss << "SetDomePosition(" << value << ")";
+    SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
+
+    // on left servo (from behind the robot), 0 is down, shoots higher, 1 is up, shoots lower
+    if (value > 90.0)
+        value = 90.0;
+    if (value < 0.0)
+        value = 0.0;
+
+    domeServo->SetAngle(value);
+    domeServo2->SetAngle(180.0 - value);
 }
 
 void IonCannon::ShooterPidControl()

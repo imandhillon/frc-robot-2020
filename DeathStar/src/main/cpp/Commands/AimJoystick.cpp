@@ -5,7 +5,6 @@ constexpr double kDeadband = 0.1;
 
 AimJoystick::AimJoystick(): frc::Command() {
 	Requires(Robot::ionCannon.get());
-    //SetInterruptible(false);
 }
 
 // Called just before this Command runs the first time
@@ -23,7 +22,6 @@ void AimJoystick::Execute() {
         y = 0.0;
 
     // Move the turret left/right
-    /*
     if (x > 0) {
         Robot::ionCannon->AimRight();
     } else if (x < 0) {
@@ -31,7 +29,6 @@ void AimJoystick::Execute() {
     } else {
         Robot::ionCannon->StopTurret();
     }
-    */
 
     // Move the dome up/down
     //double angle = (y + 1.0) / 2.0 * 90.0;

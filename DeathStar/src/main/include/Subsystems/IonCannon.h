@@ -109,6 +109,7 @@ public:
 	void StopTurret();
 
 	double GetDomePosition();
+	void SetDomePosition(double value);
 	void StopDome();
 
 	void SetServo(float value);

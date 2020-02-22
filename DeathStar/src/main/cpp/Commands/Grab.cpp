@@ -6,7 +6,11 @@
 
 Grab::Grab(GrabDirection direction): frc::CommandGroup() {
     AddParallel(new FuelGrab(TractorBeam::kIntakeSpeed * direction));
-    AddSequential(new SpinWheel(WarpDriveInverter::kIntakeSpeed * direction));
+    
+    // Make sure the spinner is non-interruptable
+    Command* spin = new SpinWheel(WarpDriveInverter::kIntakeSpeed * -direction);
+    spin->SetInterruptible(false);
+    AddSequential(spin);
 }
 
 // Called when another command which requires one or more of the same

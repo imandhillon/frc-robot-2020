@@ -17,7 +17,6 @@ void WarpDriveInverter::ColorMatcherInit()
     colorMatcher->AddColorMatch(kYellowTarget);
 }
 
-  
 void WarpDriveInverter::MoveMotor(double speed){
   wheelMotor->Set(speed); //set at a fixed power for now, will eventually be on a PID velocity
 }
@@ -54,6 +53,7 @@ bool WarpDriveInverter::inRange(){
 void WarpDriveInverter::InitDefaultCommand() {
     // Set the default command for a subsystem here.
     // SetDefaultCommand(new MySpecialCommand());
+  ColorMatcherInit();
 }
 
 void WarpDriveInverter::Periodic() {

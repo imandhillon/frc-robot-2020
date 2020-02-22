@@ -51,7 +51,7 @@ void TheForce::InitDefaultCommand() {
 void TheForce::Periodic() {
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("TheForce", liftEncoder->GetDistance());
-     YodaLift();
+    //YodaLift();
 }
 
 // Put methods for controlling this subsystem

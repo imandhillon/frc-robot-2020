@@ -90,7 +90,7 @@ void IonCannon::Periodic() {
     //frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 
     //ShooterPidControl();
-    //TurretPidControl();
+    TurretPidControl();
 }
 
 void IonCannon::AimCamPosition() {
@@ -272,11 +272,11 @@ void IonCannon::Burn()
 double IonCannon::GetTurretPosition()
 {
     double pos = turretQuadEncoder->GetPosition();
-
+/*
     std::stringstream ss;
     ss << "GetTurretPosition() == " << pos;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
-
+*/
     return pos;
 }
 
@@ -293,10 +293,11 @@ double IonCannon::GetDomePosition()
 {
     double pos = domeServo->GetAngle();
 
+/*
     std::stringstream ss;
     ss << "GetDomePosition() == " << pos;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
-
+*/
     return pos;
 }
 

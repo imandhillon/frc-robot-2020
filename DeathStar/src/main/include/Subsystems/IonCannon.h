@@ -45,8 +45,13 @@ private:
 	std::shared_ptr<rev::CANPIDController> turretPIDController;
 	std::shared_ptr<rev::CANPIDController> shooterPIDController;
 
+	// Used for PID control on dashboard
+	double kvP = 6e-5, kvI = 1e-6, kvD = 0, kvIz = 0, kvFF = 0.000015, kvMaxOutput = 1.0, kvMinOutput = -1.0;
+	void ShooterPidControl();
 
-	//std::shared_ptr<frc::DigitalInput> loadedSensor;
+	double kpP = 0.1, kpI = 1e-4, kpD = 1, kpIz = 0, kpFF = 0, kpMaxOutput = 1, kpMinOutput = -1;
+	void TurretPidControl();
+
 
 	float m_domeServo = 0.0;
 //

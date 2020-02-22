@@ -156,4 +156,48 @@ void TheForce::SetLiftSolo()   // hang
         m_aPosition = (double)liftEncoder->GetDistance();
     }
 
+/*
+void TheForce::::PidControl()
+{
+    // display PID coefficients on SmartDashboard
+    frc::SmartDashboard::PutNumber("P Gain", kpP);
+    frc::SmartDashboard::PutNumber("I Gain", kpI);
+    frc::SmartDashboard::PutNumber("D Gain", kpD);
+    frc::SmartDashboard::PutNumber("I Zone", kpIz);
+    frc::SmartDashboard::PutNumber("Feed Forward", kpFF);
+    frc::SmartDashboard::PutNumber("Max Output", kpMaxOutput);
+    frc::SmartDashboard::PutNumber("Min Output", kpMinOutput);
+    frc::SmartDashboard::PutNumber("Set Rotations", 0);
 
+    // read PID coefficients from SmartDashboard
+    double p = frc::SmartDashboard::GetNumber("P Gain", 0);
+    double i = frc::SmartDashboard::GetNumber("I Gain", 0);
+    double d = frc::SmartDashboard::GetNumber("D Gain", 0);
+    double iz = frc::SmartDashboard::GetNumber("I Zone", 0);
+    double ff = frc::SmartDashboard::GetNumber("Feed Forward", 0);
+    double max = frc::SmartDashboard::GetNumber("Max Output", 0);
+    double min = frc::SmartDashboard::GetNumber("Min Output", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kpP)) { turretPIDController->SetP(p); kpP = p; }
+    if((i != kpI)) { turretPIDController->SetI(i); kpI = i; }
+    if((d != kpD)) { turretPIDController->SetD(d); kpD = d; }
+    if((iz != kpIz)) { turretPIDController->SetIZone(iz); kpIz = iz; }
+    if((ff != kpFF)) { turretPIDController->SetFF(ff); kpFF = ff; }
+    if((max != kpMaxOutput) || (min != kpMinOutput)) {
+      m_liftPIDController->SetOutputRange(min, max);
+      kpMinOutput = min; kpMaxOutput = max;
+    }
+
+    // read setpoint from joystick and scale by max rpm
+    //double SetPoint = 0.0;// = MaxRPM*m_stick.GetY();
+    double SetPoint = frc::SmartDashboard::GetNumber("SetPoint", 0.0);
+
+
+    m_liftPIDController->SetReference(SetPoint, rev::ControlType::kVelocity);
+
+    frc::SmartDashboard::PutNumber("SetPoint", SetPoint);
+    frc::SmartDashboard::PutNumber("ProcessVariable", liftEncoder->GetVelocity());
+
+}
+*/

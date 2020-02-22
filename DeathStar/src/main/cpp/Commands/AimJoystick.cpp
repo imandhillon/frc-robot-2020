@@ -34,9 +34,8 @@ void AimJoystick::Execute() {
     */
 
     // Move the dome up/down
-    double angle = (y + 1.0) / 2.0 * 90.0;
-    Robot::ionCannon->SetServo(angle);
-    /*
+    //double angle = (y + 1.0) / 2.0 * 90.0;
+    //Robot::ionCannon->SetServo(angle);
     if (y > 0) {
         Robot::ionCannon->AimUp();
     } else if (y < 0) {
@@ -44,7 +43,6 @@ void AimJoystick::Execute() {
     } else {
         Robot::ionCannon->StopDome();
     }
-    */
 }
 
 // Make this return true when this Command no longer needs to run execute()

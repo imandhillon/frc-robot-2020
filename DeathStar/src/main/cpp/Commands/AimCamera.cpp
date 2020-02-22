@@ -29,8 +29,8 @@ void AimCamera::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void AimCamera::Execute() {
-    Robot::ionCannon->AimCam();
-    //Robot::ionCannon->AimCamPosition();
+    //Robot::ionCannon->AimCam();
+    Robot::ionCannon->AimCamPosition();
 }
 
 // Make this return true when this Command no longer needs to run execute()

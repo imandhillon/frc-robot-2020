@@ -55,7 +55,7 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     //shooter1Encoder->SetPositionConversionFactor(1.0);
 
     // initialize to zero, range is +/- 90 degrees
-    //turretQuadEncoder->SetPosition(0);
+    turretQuadEncoder->SetPosition(0);
     
     //uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
     //turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
@@ -104,7 +104,6 @@ void IonCannon::InitDefaultCommand() {
 
 void IonCannon::Periodic() {
 
-    //AimCam();
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
@@ -128,7 +127,7 @@ void IonCannon::AimCamPosition() {
         frc::SmartDashboard::PutNumber("get turret position",GetTurretPosition());
         frc::SmartDashboard::PutNumber("set turret position",dx);
 
-        //SetTurretPosition(dx);
+        SetTurretPosition(dx);
     }
     else {
         frc::SmartDashboard::PutNumber("stop turret ", 0);

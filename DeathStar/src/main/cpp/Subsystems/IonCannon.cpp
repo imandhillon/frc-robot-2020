@@ -25,11 +25,15 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     shooterMotor1.reset(new rev::CANSparkMax(12, rev::CANSparkMax::MotorType::kBrushless));
     shooterMotor2.reset(new rev::CANSparkMax(13, rev::CANSparkMax::MotorType::kBrushless));
     turretMotor.reset(new rev::CANSparkMax(14, rev::CANSparkMax::MotorType::kBrushless));
-    domeServo.reset(new frc::Servo(5));
+    domeServo.reset(new frc::Servo(4));
+    domeServo2.reset(new frc::Servo(5));
     AddChild("DomeServo", domeServo);
+    AddChild("DomeServo2", domeServo2);
 
-    turretReferenceSwitch.reset(new frc::DigitalInput(4));
-    AddChild("TurretReferenceSwitch", turretReferenceSwitch);
+
+
+    //turretReferenceSwitch.reset(new frc::DigitalInput(4));
+    //AddChild("TurretReferenceSwitch", turretReferenceSwitch);
 
     // Set up encoders
     shooter1Encoder.reset(new rev::CANEncoder(*shooterMotor1));
@@ -89,8 +93,6 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     turretPIDController->SetIZone(kpIz);
     turretPIDController->SetFF(kpFF);
     turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
-
-
 } 
 
 
@@ -102,11 +104,16 @@ void IonCannon::InitDefaultCommand() {
 
 void IonCannon::Periodic() {
 
-    AimCam();
+    //AimCam();
     // Put code here to be run every loop
     frc::SmartDashboard::PutNumber("shooterSpd",shooter1Encoder->GetVelocity() );
     frc::SmartDashboard::PutNumber("turretPos",GetTurretPosition() );
     frc::SmartDashboard::PutNumber("domePos",GetDomePosition());
+
+    frc::SmartDashboard::PutNumber("servo 1 angle", domeServo->GetAngle());
+    frc::SmartDashboard::PutNumber("servo 2 angle", domeServo2->GetAngle());
+    frc::SmartDashboard::PutNumber("servo 1 pos", domeServo->GetPosition());
+    frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 }
 
 void IonCannon::AimCamPosition() {
@@ -205,22 +212,46 @@ void IonCannon::AimRight()
 }
 void IonCannon::AimUp()
 {
-    domeServo->SetSpeed(kDomeSpeed);
+    //domeServo->SetSpeed(kDomeSpeed);
+    //domeServo2->SetSpeed(-kDomeSpeed);
 }
 void IonCannon::AimDown()
 {
-    domeServo->SetSpeed(-kDomeSpeed);
+    //domeServo->SetSpeed(-kDomeSpeed);
+    //domeServo2->SetSpeed(kDomeSpeed);
 }
 
-void IonCannon::SetServo(float value){
+// this takes a value between -1 to 1, i.e. joystick
+// now this takes a value between 0 and 90 degrees
+void IonCannon::SetServo(float value)
+{
+
+// on left servo (from behind the robot), 0 is down, shoots higher, 1 is up, shoots lower
+    if (value > 90.0)
+        value = 90.0;
+    if (value < 0.0)
+        value = 0.0;
+
+    domeServo->SetAngle(value);
+    domeServo2->SetAngle(180.0 - value);
+/*
     m_domeServo = value / 2 + 0.5;
+    if (m_domeServo > 1.0)
+        m_domeServo = 1.0;
+    if (m_domeServo < 0.0)
+        m_domeServo = 0.0;
+
+    // send a value between 0 and 1
     domeServo->Set(m_domeServo);
+    domeServo2->Set(m_domeServo);
+    */
 }
 
 void IonCannon::AimStop()
 {
     turretMotor->StopMotor();
     domeServo->StopMotor();
+    domeServo2->StopMotor();
 }
 void IonCannon::StopTurret()
 {
@@ -230,6 +261,7 @@ void IonCannon::StopTurret()
 void IonCannon::StopDome()
 {
         domeServo->StopMotor();
+        domeServo2->StopMotor();
 }
 
 // Burn CANSparkMAX settings on motors
@@ -272,6 +304,8 @@ double IonCannon::GetDomePosition()
 }
 
 
+/*  EVERYTHING BELOW IS JUST COMMENTS GOING OVER THE EXZMPLEZ
+ */
 static void SetPidStuff()
 {
         // read setpoint from joystick and scale by max rpm

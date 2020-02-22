@@ -23,6 +23,7 @@ void AimJoystick::Execute() {
         y = 0.0;
 
     // Move the turret left/right
+    /*
     if (x > 0) {
         Robot::ionCannon->AimRight();
     } else if (x < 0) {
@@ -30,9 +31,11 @@ void AimJoystick::Execute() {
     } else {
         Robot::ionCannon->StopTurret();
     }
+    */
 
     // Move the dome up/down
-    Robot::ionCannon->SetServo(y);
+    double angle = (y + 1.0) / 2.0 * 90.0;
+    Robot::ionCannon->SetServo(angle);
     /*
     if (y > 0) {
         Robot::ionCannon->AimUp();

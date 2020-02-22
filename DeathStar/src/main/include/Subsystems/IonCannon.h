@@ -38,6 +38,7 @@ private:
 	std::shared_ptr<rev::CANSparkMax> shooterMotor2;
 	std::shared_ptr<rev::CANSparkMax> turretMotor;
 	std::shared_ptr<frc::Servo> domeServo;
+	std::shared_ptr<frc::Servo> domeServo2;
 	std::shared_ptr<frc::DigitalInput> turretReferenceSwitch;
 	std::shared_ptr<rev::CANEncoder> shooter1Encoder;
 	std::shared_ptr<rev::CANEncoder> turretQuadEncoder;
@@ -45,7 +46,7 @@ private:
 	std::shared_ptr<rev::CANPIDController> shooterPIDController;
 
 
-	std::shared_ptr<frc::DigitalInput> loadedSensor;
+	//std::shared_ptr<frc::DigitalInput> loadedSensor;
 
 	float m_domeServo = 0.0;
 //

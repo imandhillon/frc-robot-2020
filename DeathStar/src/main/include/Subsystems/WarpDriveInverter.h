@@ -54,6 +54,7 @@ public:
 	static constexpr double kMotorWheelCircumference = 3; //3 inch wheel
 	static constexpr double	kColorWheelSpeed = 0.2;
 	static constexpr double kIntakeSpeed = 1.0;
+	enum {BLUE = 0, GREEN = 1, YELLOW = 2, RED = 3, ERROR = 4, NO_DATA = -1};
 
 WarpDriveInverter();
 	void InitDefaultCommand() override;
@@ -67,7 +68,7 @@ WarpDriveInverter();
 	uint32_t getProximity();
 	double getPosition();
 	bool inRange();
-	enum {BLUE = 0, GREEN = 1, YELLOW = 2, RED = 3, ERROR = 4, NO_INFO = -1};
+	
 
 };
 

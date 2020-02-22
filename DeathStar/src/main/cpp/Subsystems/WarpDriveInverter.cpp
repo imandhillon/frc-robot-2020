@@ -132,7 +132,7 @@ void WarpDriveInverter::Periodic() {
     } 
     else {
       frc::SmartDashboard::PutString("Game Data Color", "NO INFO");
-      requestedColor = NO_INFO;
+      requestedColor = NO_DATA;
       frc::SmartDashboard::PutBoolean("Got color FMS", false);
     }
 }

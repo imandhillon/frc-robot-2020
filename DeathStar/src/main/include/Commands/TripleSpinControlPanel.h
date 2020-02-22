@@ -20,6 +20,7 @@ class TripleSpinControlPanel : public frc::Command {
   void Interrupted() override;
 private:
   bool MotorRunning;
+  bool tripleSpinDone;
   double lastColorChangePos;
   double initialPos;
   int lastColor; 

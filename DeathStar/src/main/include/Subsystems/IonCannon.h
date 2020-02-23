@@ -46,10 +46,12 @@ private:
 	std::shared_ptr<rev::CANPIDController> shooterPIDController;
 
 	// Used for PID control on dashboard
-	double kvP = 6e-5, kvI = 1e-6, kvD = 0, kvIz = 0, kvFF = 0.000015, kvMaxOutput = 1.0, kvMinOutput = -1.0;
+	//double kvP = 6e-5, kvI = 1e-6, kvD = 0, kvIz = 0, kvFF = 0.000015, kvMaxOutput = 1.0, kvMinOutput = -1.0;
+	double kvP = 0.00065, kvI = 0.000001, kvD = 0.015, kvIz = 0, kvFF = 0.000015, kvMaxOutput = 1.0, kvMinOutput = -1.0;
 	void ShooterPidControl();
 
-	double kpP = 0.1, kpI = 1e-4, kpD = 1, kpIz = 0, kpFF = 0, kpMaxOutput = 1, kpMinOutput = -1;
+	//double kpP = 0.1, kpI = 1e-4, kpD = 1, kpIz = 0, kpFF = 0, kpMaxOutput = 1, kpMinOutput = -1;
+	double kpP = 1.5, kpI = 0, kpD = 0, kpIz = 0, kpFF = 0, kpMaxOutput = 0.625, kpMinOutput = -0.625;
 	void TurretPidControl();
 
 
@@ -68,9 +70,10 @@ private:
 public:
 	static constexpr double kShooterSpeed = 0.45;
 	static constexpr double kShooterIdle = 0.2;
-	static constexpr double kTurretSpeed = 0.4;
+	static constexpr double kTurretSpeed = 0.7;
 	static constexpr double kTurretXFactor = 1.0;  // what we multiply the targeting X by to move the position
 	static constexpr double kDomeSpeed = 0.5;
+	static constexpr double kTurretRampRate = 0.25;
 
 	static constexpr double kCamTolerance = 3.;
 	static constexpr double kCamPower = 0.05;

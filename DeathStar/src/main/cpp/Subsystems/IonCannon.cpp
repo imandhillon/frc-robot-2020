@@ -28,10 +28,19 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     // initialize to zero, range is +/- 90 degrees
     turretQuadEncoder->SetPosition(0);
 
+    shooterMotor1->RestoreFactoryDefaults();
+    shooterMotor1->SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    shooterMotor2->RestoreFactoryDefaults();
+    shooterMotor2->SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+
+    turretMotor->RestoreFactoryDefaults();
+    turretMotor->SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+
     // limit current
     shooterMotor1->SetSmartCurrentLimit(kShooterMaxCurrent);
     shooterMotor2->SetSmartCurrentLimit(kShooterMaxCurrent);
     turretMotor->SetSmartCurrentLimit(kTurretMaxCurrent);
+    //turretMotor->SetClosedLoopRampRate(0.125); //kTurretRampRate);
     
     // Set the shooter motor follower
     shooterMotor2->Follow(*shooterMotor1);
@@ -40,17 +49,7 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     //shooter1Encoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kWheelRadius * kGearRatio / lcpr);
     //shooter1Encoder->SetPositionConversionFactor(1.0);
 
-    //uint32_t tcpr = turretQuadEncoder->GetCountsPerRevolution();
-    //turretQuadEncoder->SetPositionConversionFactor(2.0 * wpi::math::pi * (double)kTurretRadius * kTGearRatio / tcpr);
-    //turretQuadEncoder->SetPositionConversionFactor(1.0);
-
-    /**
-     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
-     * in the SPARK MAX to their factory default state. If no argument is passed, these
-     * parameters will not persist between power cycles
-     */
-    //m_motor.RestoreFactoryDefaults();
-  // default velocity PID coefficients
+    // default velocity PID coefficients
     shooterPIDController.reset(new rev::CANPIDController(*shooterMotor1));
     shooterPIDController->SetP(kvP);
     shooterPIDController->SetI(kvI);
@@ -59,7 +58,7 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     shooterPIDController->SetFF(kvFF);
     shooterPIDController->SetOutputRange(kvMinOutput, kvMaxOutput);
 
-      // default Position PID coefficients
+    // default Position PID coefficients
     turretPIDController.reset(new rev::CANPIDController(*turretMotor));
     turretPIDController->SetP(kpP);
     turretPIDController->SetI(kpI);
@@ -67,6 +66,20 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     turretPIDController->SetIZone(kpIz);
     turretPIDController->SetFF(kpFF);
     turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
+
+    // start dome position
+    SetDomePosition(86);
+
+    // display PID coefficients on SmartDashboard
+    frc::SmartDashboard::PutNumber("P Gain", kvP);
+    frc::SmartDashboard::PutNumber("I Gain", kvI);
+    frc::SmartDashboard::PutNumber("D Gain", kvD);
+    frc::SmartDashboard::PutNumber("I Zone", kvIz);
+    frc::SmartDashboard::PutNumber("Feed Forward", kvFF);
+    frc::SmartDashboard::PutNumber("Max Output", kvMaxOutput);
+    frc::SmartDashboard::PutNumber("Min Output", kvMinOutput);
+    frc::SmartDashboard::PutNumber("Set Rotations", 0);
+
 } 
 
 
@@ -89,8 +102,8 @@ void IonCannon::Periodic() {
     //frc::SmartDashboard::PutNumber("servo 1 pos", domeServo->GetPosition());
     //frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 
-    //ShooterPidControl();
-    TurretPidControl();
+    ShooterPidControl();
+    //TurretPidControl();
 }
 
 void IonCannon::AimCamPosition() {
@@ -320,6 +333,7 @@ void IonCannon::SetDomePosition(double value)
 
 void IonCannon::ShooterPidControl()
 {
+    /*
     // display PID coefficients on SmartDashboard
     frc::SmartDashboard::PutNumber("P Gain", kvP);
     frc::SmartDashboard::PutNumber("I Gain", kvI);
@@ -329,16 +343,15 @@ void IonCannon::ShooterPidControl()
     frc::SmartDashboard::PutNumber("Max Output", kvMaxOutput);
     frc::SmartDashboard::PutNumber("Min Output", kvMinOutput);
     frc::SmartDashboard::PutNumber("Set Rotations", 0);
-
+*/
     // read PID coefficients from SmartDashboard
-    double p = frc::SmartDashboard::GetNumber("P Gain", 0);
-    double i = frc::SmartDashboard::GetNumber("I Gain", 0);
-    double d = frc::SmartDashboard::GetNumber("D Gain", 0);
-    double iz = frc::SmartDashboard::GetNumber("I Zone", 0);
-    double ff = frc::SmartDashboard::GetNumber("Feed Forward", 0);
-    double max = frc::SmartDashboard::GetNumber("Max Output", 0);
-    double min = frc::SmartDashboard::GetNumber("Min Output", 0);
-    double rotations = frc::SmartDashboard::GetNumber("Set Rotations", 0);
+    double p = frc::SmartDashboard::GetNumber("P Gain", kvP);
+    double i = frc::SmartDashboard::GetNumber("I Gain", kvI);
+    double d = frc::SmartDashboard::GetNumber("D Gain", kvD);
+    double iz = frc::SmartDashboard::GetNumber("I Zone", kvIz);
+    double ff = frc::SmartDashboard::GetNumber("Feed Forward", kvFF);
+    double max = frc::SmartDashboard::GetNumber("Max Output", kvMaxOutput);
+    double min = frc::SmartDashboard::GetNumber("Min Output", kvMinOutput);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if((p != kvP)) { shooterPIDController->SetP(p); kvP = p; }
@@ -364,15 +377,17 @@ void IonCannon::ShooterPidControl()
      *  rev::ControlType::kVelocity
      *  rev::ControlType::kVoltage
      */
-    shooterPIDController->SetReference(rotations, rev::ControlType::kPosition);
+    double rotations = frc::SmartDashboard::GetNumber("Set Rotations", 0);
+
+    shooterPIDController->SetReference(rotations, rev::ControlType::kVelocity);
 
     frc::SmartDashboard::PutNumber("SetPoint", rotations);
-    frc::SmartDashboard::PutNumber("ProcessVariable", shooter1Encoder->GetPosition());
+    frc::SmartDashboard::PutNumber("ProcessVariable", shooter1Encoder->GetVelocity());
 }
 
 void IonCannon::TurretPidControl()
 {
-    // display PID coefficients on SmartDashboard
+/*    // display PID coefficients on SmartDashboard
     frc::SmartDashboard::PutNumber("P Gain", kpP);
     frc::SmartDashboard::PutNumber("I Gain", kpI);
     frc::SmartDashboard::PutNumber("D Gain", kpD);
@@ -381,15 +396,15 @@ void IonCannon::TurretPidControl()
     frc::SmartDashboard::PutNumber("Max Output", kpMaxOutput);
     frc::SmartDashboard::PutNumber("Min Output", kpMinOutput);
     frc::SmartDashboard::PutNumber("Set Rotations", 0);
-
+*/
     // read PID coefficients from SmartDashboard
-    double p = frc::SmartDashboard::GetNumber("P Gain", 0);
-    double i = frc::SmartDashboard::GetNumber("I Gain", 0);
-    double d = frc::SmartDashboard::GetNumber("D Gain", 0);
-    double iz = frc::SmartDashboard::GetNumber("I Zone", 0);
-    double ff = frc::SmartDashboard::GetNumber("Feed Forward", 0);
-    double max = frc::SmartDashboard::GetNumber("Max Output", 0);
-    double min = frc::SmartDashboard::GetNumber("Min Output", 0);
+    double p = frc::SmartDashboard::GetNumber("P Gain", kpP);
+    double i = frc::SmartDashboard::GetNumber("I Gain", kpI);
+    double d = frc::SmartDashboard::GetNumber("D Gain", kpD);
+    double iz = frc::SmartDashboard::GetNumber("I Zone", kpIz);
+    double ff = frc::SmartDashboard::GetNumber("Feed Forward", kpFF);
+    double max = frc::SmartDashboard::GetNumber("Max Output", kpMaxOutput);
+    double min = frc::SmartDashboard::GetNumber("Min Output", kpMinOutput);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if((p != kpP)) { turretPIDController->SetP(p); kpP = p; }
@@ -405,11 +420,15 @@ void IonCannon::TurretPidControl()
     // read setpoint from joystick and scale by max rpm
     //double SetPoint = 0.0;// = MaxRPM*m_stick.GetY();
     double SetPoint = frc::SmartDashboard::GetNumber("SetPoint", 0.0);
+    if (SetPoint < -90)
+        SetPoint = -90;
+    else if (SetPoint > 90)
+        SetPoint = 90;
 
+    turretPIDController->SetReference(SetPoint, rev::ControlType::kPosition);
 
-    turretPIDController->SetReference(SetPoint, rev::ControlType::kVelocity);
-
+    frc::SmartDashboard::PutNumber("Current P", kpP);
     frc::SmartDashboard::PutNumber("SetPoint", SetPoint);
-    frc::SmartDashboard::PutNumber("ProcessVariable", turretQuadEncoder->GetVelocity());
+    frc::SmartDashboard::PutNumber("ProcessVariable", turretQuadEncoder->GetPosition());
 
 }

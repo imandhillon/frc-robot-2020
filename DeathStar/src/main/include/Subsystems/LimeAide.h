@@ -12,6 +12,7 @@
 #pragma once
 
 #include "frc/commands/Subsystem.h"
+#include "../SPAMutil.h"
 
 class LimeAide: public frc::Subsystem {
 private:
@@ -23,6 +24,12 @@ private:
 	double m_targetArea;
 	double m_targetSkew;
 
+    int m_nX = 3;
+	float m_shooterSetPoints[3]={0., 0., 0.};
+	float m_trgtAreas[3]={0., 1., 2.};
+	float m_domeAngles[3]={0., 0., 0.};
+	double m_limeSpeedSetpoint;
+	double m_limeAngleSetpoint;
 
 public:
 	LimeAide();
@@ -41,6 +48,11 @@ public:
 	void LimeRoxLEDOn();
 	void LimeRoxLEDOff();
     void LimeRoxLEDBlnk();
+
+	void LimeSpeeds(float xIn);
+	void LimeAngles(float xIn);
+    double getLimeSpdStPt();
+	double getLimeDomeStPt();
 	
 };
 

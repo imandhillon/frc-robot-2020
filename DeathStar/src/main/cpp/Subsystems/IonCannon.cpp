@@ -67,6 +67,9 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     turretPIDController->SetFF(kpFF);
     turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
 
+    shooterBBController.reset(new BangBangController());
+    shooterBBController->SetSource(shooter1Encoder.get(), kBBSourceRate);
+
     // start dome position
     SetDomePosition(86);
 
@@ -102,7 +105,11 @@ void IonCannon::Periodic() {
     //frc::SmartDashboard::PutNumber("servo 1 pos", domeServo->GetPosition());
     //frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 
-    ShooterPidControl();
+    // Run the shooter controller
+    if (shooterEnabled)
+        shooterMotor1->Set(shooterBBController->Calculate());
+
+    //ShooterPidControl();
     //TurretPidControl();
 }
 
@@ -131,7 +138,6 @@ void IonCannon::AimCamPosition() {
 void IonCannon::AimCam() {
     SPAMutil::Log("IonCannon", "AimCam", SPAMutil::LOG_DBG);
     float x = 0.;            // raw 0
-    bool mMoving = false;
 
     if (Robot::limeAide->getLimeRoxInView()) {   
 		double error = Robot::limeAide->getLimeRoxX(); 
@@ -141,7 +147,6 @@ void IonCannon::AimCam() {
 				speed = kCamLimit;
 			x = float(speed);
 			//turretMotor->Set(x);
-			mMoving = true;
 		}
 		else if (error < -kCamTolerance) {
 			double speed = kCamPower * error - kCamFriction;
@@ -149,18 +154,15 @@ void IonCannon::AimCam() {
 				speed = -kCamLimit;
 			x = float(speed);
 			//turretMotor->Set(x);
-			mMoving = true;
 		}
 		else {
 			//turretMotor->Set(x);
-			mMoving = false;
 		    turretMotor->StopMotor();
 		}
 	}
 	else {
 			//SPAMutil::Log("CamDrive","No data",SPAMutil::LOG_INFO);
 			turretMotor->StopMotor();
-			mMoving = false;
 	}	
   /* why does turretQuadEncoder->GetPosition() return -90?
     if (x > 0) {
@@ -178,6 +180,7 @@ void IonCannon::AimCam() {
             //turretMotor ->Set(-x);
     }
   */
+
     turretMotor ->Set(-x);
     frc::SmartDashboard::PutNumber("turretSpd",x );
 	
@@ -190,12 +193,16 @@ void IonCannon::SpinShooter(double speed)
     ss << "SpinShooter(" << speed << ")";
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
-    shooterMotor1->Set(speed);
+    //shooterMotor1->Set(speed);
+    shooterBBController->SetSetpoint(speed);
+    SetShooterEnabled(true);
 }
 
 void IonCannon::StopShooter()
 {
     SPAMutil::Log("IonCannon", "StopShooter", SPAMutil::LOG_DBG);
+    SetShooterEnabled(false);
+    shooterBBController->SetSetpoint(0);
     shooterMotor1->StopMotor();
 }
 

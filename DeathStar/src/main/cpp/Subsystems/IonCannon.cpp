@@ -67,7 +67,7 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     turretPIDController->SetFF(kpFF);
     turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
 
-    shooterBBController.reset(new BangBangController());
+    shooterBBController.reset(new BangBangController(kShooterSpeed, kShooterBBLow, kShooterBBHigh));
     shooterBBController->SetSource(shooter1Encoder.get(), kBBSourceRate);
 
     // start dome position

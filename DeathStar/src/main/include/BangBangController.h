@@ -10,8 +10,8 @@ enum BBSourceType { kBBSourceRate = 0, kBBSourcePosition = 1 };
 
 class BangBangController {
 public:
-    BangBangController();
-    BangBangController(double lowLimit, double highLimit);
+    BangBangController(double bbspeed);
+    BangBangController(double bbspeed, double lowLimit, double highLimit);
     ~BangBangController();
 
     //BangBangController& operator=(const BangBangController&) = default;
@@ -19,7 +19,13 @@ public:
     void SetSource(rev::CANEncoder * source, BBSourceType type);
 
     /**
-     * Set the BangBang limits
+     * Set the BangBang output speed (+/-)
+     */
+    void SetBBSpeed(double speed);
+    double GetBBSpeed() const { return m_speed; }
+
+    /**
+     * Set the BangBang error limits
      */
     void SetBBLimits(double lowlimit, double highlimit);
 

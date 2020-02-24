@@ -3,18 +3,25 @@
 #include <algorithm>
 
 
-BangBangController::BangBangController()
+BangBangController::BangBangController(double speed)
 {
+    m_speed = speed;
 }
 
-BangBangController::BangBangController(double lowLimit, double highLimit)
+BangBangController::BangBangController(double speed, double lowLimit, double highLimit)
 {
+    m_speed = speed;
     m_bangLow = lowLimit;
     m_bangHigh = highLimit;
 }
 
 BangBangController::~BangBangController()
 {
+}
+
+void BangBangController::SetBBSpeed(double speed)
+{
+    m_speed = speed;
 }
 
 void BangBangController::SetSource(frc::PIDSource * source, BBSourceType type)

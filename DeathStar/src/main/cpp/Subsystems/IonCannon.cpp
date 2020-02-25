@@ -6,6 +6,7 @@
 #include "Commands/AimJoystick.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 #include <sstream>
+#include <limits>
 
 constexpr double kShooterMaxCurrent = 40.0;
 constexpr double kTurretMaxCurrent = 20.0;
@@ -106,8 +107,10 @@ void IonCannon::Periodic() {
     //frc::SmartDashboard::PutNumber("servo 2 pos", domeServo2->GetPosition());
 
     // Run the shooter controller
-    if (shooterEnabled)
-        shooterMotor1->Set(shooterBBController->Calculate());
+    if (shooterEnabled) {
+        double speed = shooterBBController->Calculate();
+        shooterMotor1->Set(std::clamp(speed, -kShooterSpeed, kShooterSpeed));
+    }
 
     //ShooterPidControl();
     //TurretPidControl();

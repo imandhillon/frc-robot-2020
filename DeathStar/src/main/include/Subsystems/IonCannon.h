@@ -61,10 +61,12 @@ private:
 	float m_domeServo = 0.0;
 
 public:
-	static constexpr double kShooterSpeed = 0.45;
+
+	static constexpr double kShooterPower = 0.95;
 	static constexpr double kShooterIdle = 0.2;
-	static constexpr double kShooterBBLow = -100;
-	static constexpr double kShooterBBHigh = 100;
+	static constexpr double kShooterSpeed = 2500;
+	static constexpr double kShooterBBLow = -50;
+	static constexpr double kShooterBBHigh = 50;
 	
 	static constexpr double kTurretSpeed = 0.7;
 	static constexpr double kTurretXFactor = 1.0;  // what we multiply the targeting X by to move the position

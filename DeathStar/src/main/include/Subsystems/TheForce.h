@@ -37,12 +37,16 @@ std::shared_ptr<ctre::phoenix::motorcontrol::can::WPI_VictorSPX> liftMotor1;
 std::shared_ptr<frc::Encoder> liftEncoder;
 std::shared_ptr<frc::DigitalInput> liftReferenceSwitch;
 // closed loop control
-frc2::PIDController m_liftPIDController{1.0, 0.0, 0.0};
+frc2::PIDController m_liftPIDController{0.002, 0.0, 0.0};
 
-    double m_BangBang_Speed   =  0.750;
-    double m_LiftSetPoint     =  0.;
+    double m_BangBang_Speed;
+    double m_LiftSetPoint;
 
     double m_aPosition;
+    double m_kminInput;
+    double m_kmaxInput;
+    double m_kmaxOutput;
+    bool theForceEnabled = true;
 
 public:
     static constexpr double BANGBANG_LO_SIDE = -100.;
@@ -65,7 +69,7 @@ public:
     void SetLiftHome();   // hang
     void SetLiftBangBang(double height, double speed); // anything
     // pid
-    void SetPosition();
+    void ChewieLift();
     void GetPosition();
     
 };

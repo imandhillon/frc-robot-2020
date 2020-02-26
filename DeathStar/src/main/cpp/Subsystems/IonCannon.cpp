@@ -101,7 +101,7 @@ void IonCannon::InitDefaultCommand() {
     SPAMutil::Log("IonCannon", "InitDefaultCommand (aim joystick)", SPAMutil::LOG_DBG);
 
     //SetDefaultCommand(new AimCamera());
-    SetDefaultCommand(new AimJoystick());
+    //SetDefaultCommand(new AimJoystick());
 }
 
 void IonCannon::Periodic() {

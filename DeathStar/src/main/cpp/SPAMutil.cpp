@@ -413,5 +413,34 @@ void SPAMutil::Log(const char* subsys, const char* msg, int level)
 
 void SPAMutil::Log(const char* subsys, const std::stringstream &msg, int level)
 {
-	Log(subsys, msg.str().c_str(), level);
+	Log(subsys, msg.str().c_str(), level); 
 }
+// moving averae filter
+        // ptrArrNumbers = sample array
+        // ptrSum        = the moving average
+        // pos           = ith position in the sample array
+        // len           = length of the sample array
+        // nextNum       = incoming sample
+        // USAGE:
+		// init:
+		// arrNumbers[5] = {0};
+		// int pos = 0;
+        // double newAvg = 0.;
+        // double sum = 0.;
+		// int len = 5;
+		// double nextSample = aValue;
+		//
+        // newAvg = MovingAvg(arrNumbers, &sum, pos, len, nextSample);
+        // pos++;
+        // if (pos >= len)
+        //   pos = 0;
+        // 
+double SPAMutil::MovingAvg(double *ptrArrNumbers, double *ptrSum, int pos, int len, double nextNum){
+    //Subtract the oldest number from the prev sum, add the new number
+    *ptrSum = *ptrSum - ptrArrNumbers[pos] + nextNum;
+    //Assign the nextNum to the position in the array
+    ptrArrNumbers[pos] = nextNum;
+    //return the average
+    return *ptrSum / (double)len;
+}       
+        

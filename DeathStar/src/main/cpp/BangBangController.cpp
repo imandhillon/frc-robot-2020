@@ -1,5 +1,6 @@
 
 #include "BangBangController.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 #include <algorithm>
 
 
@@ -147,8 +148,10 @@ double BangBangController::Calculate(double measurement)
  */
 double BangBangController::Calculate(double measurement, double setpoint)
 {
-    double err = setpoint - measurement;
-    double output = 0;
+    double err = measurement - setpoint;
+    double output = m_lastSpeed;
+
+    frc::SmartDashboard::PutNumber("shooter bb err", err);
 
     if (err < m_bangLow) {
         output = m_lowSpeed;
@@ -156,5 +159,6 @@ double BangBangController::Calculate(double measurement, double setpoint)
     else if (err > m_bangHigh) {
         output = m_highSpeed;
     }
+    m_lastSpeed = output;
     return output;
 }

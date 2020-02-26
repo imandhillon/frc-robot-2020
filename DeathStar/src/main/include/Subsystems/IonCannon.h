@@ -56,7 +56,7 @@ private:
 	double kpP = 1.5, kpI = 0, kpD = 0, kpIz = 0, kpFF = 0, kpMaxOutput = 0.625, kpMinOutput = -0.625;
 	void TurretPidControl();
 
-	double kbP = 0.95, kbI = 0.2, kbS = 2500, kbLo = -50, kbHi = 50;
+	double kbP = 0.95, kbI = 0.2, kbS = 3500, kbLo = -50, kbHi = 50;
 	void ShooterBBControl();
 
 	bool shooterEnabled = true;

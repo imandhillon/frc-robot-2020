@@ -91,16 +91,14 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     frc::SmartDashboard::PutNumber("shooter idle", kbI);
     frc::SmartDashboard::PutNumber("shooter bblow", kbLo);
     frc::SmartDashboard::PutNumber("shooter bbhigh", kbHi);
-    frc::SmartDashboard::PutNumber("Set Shooter Speed", kbS);
-
-
+    frc::SmartDashboard::PutNumber("Set Shooter Speed", kbS);\
 } 
 
 
 void IonCannon::InitDefaultCommand() {
     SPAMutil::Log("IonCannon", "InitDefaultCommand (aim joystick)", SPAMutil::LOG_DBG);
 
-    //SetDefaultCommand(new AimCamera());
+    SetDefaultCommand(new AimCamera());
     //SetDefaultCommand(new AimJoystick());
 }
 
@@ -123,12 +121,12 @@ void IonCannon::Periodic() {
         double power = shooterBBController->Calculate();
         double speed = shooter1Encoder->GetVelocity();
         shooterMotor1->Set(std::clamp(power, 0.0, kShooterPower));
-        frc::SmartDashboard::PutNumber("shooter power", power);
-        frc::SmartDashboard::PutNumber("shooter speed", speed);
+        frc::SmartDashboard::PutNumber("shooter out power", power);
+        frc::SmartDashboard::PutNumber("shooter out speed", speed);
     }
     else {
-        frc::SmartDashboard::PutNumber("shooter power", 0);
-        frc::SmartDashboard::PutNumber("shooter speed", 0);
+        frc::SmartDashboard::PutNumber("shooter out power", 0);
+        frc::SmartDashboard::PutNumber("shooter out speed", 0);
     }
 
     ShooterBBControl();
@@ -137,6 +135,11 @@ void IonCannon::Periodic() {
 }
 
 void IonCannon::AimCamPosition() {
+    static int loop = 0;
+    if (loop++ < 5)
+        return;
+
+    loop = 0;
     SPAMutil::Log("IonCannon", "AimCamPosition", SPAMutil::LOG_DBG);
     if (Robot::limeAide->getLimeRoxInView()) {
 		double tx = Robot::limeAide->getLimeRoxX();
@@ -329,7 +332,7 @@ void IonCannon::SetTurretPosition(double position)
     ss << "SetTurretPosition(" << position << ")" ;
     SPAMutil::Log("IonCannon", ss.str().c_str(), SPAMutil::LOG_DBG);
 
-    turretQuadEncoder->SetPosition(position);
+    turretPIDController->SetReference(position, rev::ControlType::kPosition);
 }
 
 double IonCannon::GetDomePosition()

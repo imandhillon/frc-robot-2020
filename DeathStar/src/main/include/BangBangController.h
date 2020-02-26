@@ -104,6 +104,7 @@ private:
     double m_bangHigh = 100.0;
     double m_lowSpeed = 0;
     double m_highSpeed = 0;
+    double m_lastSpeed = 0;
 
     double m_maxinput = 0.0;
     double m_mininput = 0.0;

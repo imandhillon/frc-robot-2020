@@ -68,13 +68,15 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     turretPIDController->SetFF(kpFF);
     turretPIDController->SetOutputRange(kpMinOutput, kpMaxOutput);
 
-    shooterBBController.reset(new BangBangController(kShooterPower, kShooterBBLow, kShooterBBHigh));
+    // setup bang bang
+    shooterBBController.reset(new BangBangController(kShooterPower, kShooterIdle, kShooterBBLow, kShooterBBHigh));
     shooterBBController->SetSource(shooter1Encoder.get(), kBBSourceRate);
 
     // start dome position
     SetDomePosition(86);
 
     // display PID coefficients on SmartDashboard
+    /*
     frc::SmartDashboard::PutNumber("P Gain", kvP);
     frc::SmartDashboard::PutNumber("I Gain", kvI);
     frc::SmartDashboard::PutNumber("D Gain", kvD);
@@ -83,6 +85,14 @@ IonCannon::IonCannon() : frc::Subsystem("IonCannon") {
     frc::SmartDashboard::PutNumber("Max Output", kvMaxOutput);
     frc::SmartDashboard::PutNumber("Min Output", kvMinOutput);
     frc::SmartDashboard::PutNumber("Set Rotations", 0);
+    */
+
+    frc::SmartDashboard::PutNumber("shooter power", kbP);
+    frc::SmartDashboard::PutNumber("shooter idle", kbI);
+    frc::SmartDashboard::PutNumber("shooter bblow", kbLo);
+    frc::SmartDashboard::PutNumber("shooter bbhigh", kbHi);
+    frc::SmartDashboard::PutNumber("Set Shooter Speed", kbS);
+
 
 } 
 
@@ -110,10 +120,10 @@ void IonCannon::Periodic() {
     frc::SmartDashboard::PutBoolean("shooter enabled", shooterEnabled);
     frc::SmartDashboard::PutNumber("shooter setpoint", shooterBBController->GetSetpoint());
     if (shooterEnabled) {
-        double power = -shooterBBController->Calculate();
+        double power = shooterBBController->Calculate();
+        double speed = shooter1Encoder->GetVelocity();
         shooterMotor1->Set(std::clamp(power, 0.0, kShooterPower));
         frc::SmartDashboard::PutNumber("shooter power", power);
-        double speed = shooter1Encoder->GetVelocity();
         frc::SmartDashboard::PutNumber("shooter speed", speed);
     }
     else {
@@ -121,6 +131,7 @@ void IonCannon::Periodic() {
         frc::SmartDashboard::PutNumber("shooter speed", 0);
     }
 
+    ShooterBBControl();
     //ShooterPidControl();
     //TurretPidControl();
 }
@@ -350,8 +361,38 @@ void IonCannon::SetDomePosition(double value)
     domeServo2->SetAngle(180.0 - value);
 }
 
+void IonCannon::ShooterBBControl()
+{
+
+    // 	double kbP = 0.95, kbI = 0.2, kbS = 2500, kbLo = -50, kbHi = 50;
+
+    // read coefficients from SmartDashboard
+    double pwr = frc::SmartDashboard::GetNumber("shooter power", kbP);
+    double idle = frc::SmartDashboard::GetNumber("shooter idle", kbI);
+    double low = frc::SmartDashboard::GetNumber("shooter bblow", kbLo);
+    double high = frc::SmartDashboard::GetNumber("shooter bbhigh", kbHi);
+
+    // if coefficients on SmartDashboard have changed, write new values to controller
+    if((pwr != kbP) || (idle != kbI)) {
+      shooterBBController->SetBBSpeeds(pwr, idle);
+      kbP = pwr; kbI = idle;
+    }
+    if((low != kbLo) || (high != kbHi)) {
+      shooterBBController->SetBBLimits(low, high);
+      kbLo = low; kbHi = high;
+    }
+
+    double speed = frc::SmartDashboard::GetNumber("Set Shooter Speed", kbS);
+
+    shooterBBController->SetSetpoint(speed);
+    frc::SmartDashboard::PutNumber("SetPoint", speed);
+    kbS = speed;
+    frc::SmartDashboard::PutNumber("ProcessVariable", shooter1Encoder->GetVelocity());
+}
+
 void IonCannon::ShooterPidControl()
 {
+    frc::SmartDashboard::PutNumber("Set Shooter Speed", kbS);
     /*
     // display PID coefficients on SmartDashboard
     frc::SmartDashboard::PutNumber("P Gain", kvP);

@@ -56,6 +56,9 @@ private:
 	double kpP = 1.5, kpI = 0, kpD = 0, kpIz = 0, kpFF = 0, kpMaxOutput = 0.625, kpMinOutput = -0.625;
 	void TurretPidControl();
 
+	double kbP = 0.95, kbI = 0.2, kbS = 2500, kbLo = -50, kbHi = 50;
+	void ShooterBBControl();
+
 	bool shooterEnabled = true;
 
 	float m_domeServo = 0.0;
@@ -64,7 +67,7 @@ public:
 
 	static constexpr double kShooterPower = 0.95;
 	static constexpr double kShooterIdle = 0.2;
-	static constexpr double kShooterSpeed = 2500;
+	static constexpr double kShooterSpeed = 3500;
 	static constexpr double kShooterBBLow = -50;
 	static constexpr double kShooterBBHigh = 50;
 	

@@ -3,14 +3,16 @@
 #include <algorithm>
 
 
-BangBangController::BangBangController(double speed)
+BangBangController::BangBangController(double lowSpeed, double highSpeed)
 {
-    m_speed = speed;
+    m_lowSpeed = lowSpeed;
+    m_highSpeed = highSpeed;
 }
 
-BangBangController::BangBangController(double speed, double lowLimit, double highLimit)
+BangBangController::BangBangController(double lowSpeed, double highSpeed, double lowLimit, double highLimit)
 {
-    m_speed = speed;
+    m_lowSpeed = lowSpeed;
+    m_highSpeed = highSpeed;
     m_bangLow = lowLimit;
     m_bangHigh = highLimit;
 }
@@ -19,9 +21,10 @@ BangBangController::~BangBangController()
 {
 }
 
-void BangBangController::SetBBSpeed(double speed)
+void BangBangController::SetBBSpeeds(double lowSpeed, double highSpeed)
 {
-    m_speed = speed;
+    m_lowSpeed = lowSpeed;
+    m_highSpeed = highSpeed;
 }
 
 void BangBangController::SetSource(frc::PIDSource * source, BBSourceType type)
@@ -148,10 +151,10 @@ double BangBangController::Calculate(double measurement, double setpoint)
     double output = 0;
 
     if (err < m_bangLow) {
-        output = m_speed;
+        output = m_lowSpeed;
     }
     else if (err > m_bangHigh) {
-        output = -m_speed;
+        output = m_highSpeed;
     }
     return output;
 }

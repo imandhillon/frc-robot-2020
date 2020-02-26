@@ -10,8 +10,14 @@ enum BBSourceType { kBBSourceRate = 0, kBBSourcePosition = 1 };
 
 class BangBangController {
 public:
-    BangBangController(double bbspeed);
-    BangBangController(double bbspeed, double lowLimit, double highLimit);
+    /**
+     * The BangBangController will apply lower/upper bounds power and attempt to keep
+     * requested setpoint.  When the position/rate is below the lower limit, the "lowSpeed"
+     * power is applied (typically high power, i.e. 0.95).  When the position/rate exceeds the
+     * high bounds, then the "highSpeed" power is applied (typically a low or negative value).
+     */
+    BangBangController(double bbLowSpeed, double bbHighSpeed);
+    BangBangController(double bbLowSpeed, double bbHighSpeed, double lowLimit, double highLimit);
     ~BangBangController();
 
     //BangBangController& operator=(const BangBangController&) = default;
@@ -21,8 +27,9 @@ public:
     /**
      * Set the BangBang output speed (+/-)
      */
-    void SetBBSpeed(double speed);
-    double GetBBSpeed() const { return m_speed; }
+    void SetBBSpeeds(double bbLowSpeed, double bbHighSpeed);
+    double GetBBLowSpeed() const { return m_lowSpeed; }
+    double GetBBHighSpeed() const { return m_highSpeed; }
 
     /**
      * Set the BangBang error limits
@@ -95,7 +102,8 @@ private:
     double m_setpoint = 0;
     double m_bangLow = -100.0;
     double m_bangHigh = 100.0;
-    double m_speed = 0;
+    double m_lowSpeed = 0;
+    double m_highSpeed = 0;
 
     double m_maxinput = 0.0;
     double m_mininput = 0.0;

@@ -136,7 +136,7 @@ void IonCannon::Periodic() {
 
 void IonCannon::AimCamPosition() {
     static int loop = 0;
-    if (loop++ < 5)
+    if (loop++ < 10)
         return;
 
     loop = 0;

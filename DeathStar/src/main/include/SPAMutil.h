@@ -61,7 +61,9 @@ typedef struct {
 
         static frc::Timer* GetMatchTimer();
         static void RestartMatchTimer();
-        
+        static double MovingAvg(double *ptrArrNumbers, double *ptrSum, int pos, int len, double nextNum);
+        static void ExpMovingAvg(double newVal, double alpha, double curAvg);
+    
 private:
 	// Ensure this class can't be instantiated.
 	SPAMutil() {}

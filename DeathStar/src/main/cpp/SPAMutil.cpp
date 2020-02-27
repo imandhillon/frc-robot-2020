@@ -443,4 +443,16 @@ double SPAMutil::MovingAvg(double *ptrArrNumbers, double *ptrSum, int pos, int l
     //return the average
     return *ptrSum / (double)len;
 }       
-        
+
+void SPAMutil::ExpMovingAvg(double newVal, double alpha, double curAvg){
+	// Should store 'curAvg somewhere in some global data state and call getCurAvg() here
+	double newAvg = 0.0;
+	// Defaulted to 0.5. Need to test and tune to see what to set this to.
+    double alpha = 0.5;
+	// This equation should work for a frame of up to about 30 values.
+	// This should set a private variable somewhere.
+	newAvg = (alpha * newVal) + (1.0 - alpha) * curAvg;
+
+	// setCurAvg(newAvg);
+
+}

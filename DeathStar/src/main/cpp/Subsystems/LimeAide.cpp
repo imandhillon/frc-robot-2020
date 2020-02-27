@@ -16,7 +16,7 @@
 #include "networktables/NetworkTableInstance.h"
 
 LimeAide::LimeAide() : frc::Subsystem("LimeAide") { 
-  
+
 }
 
 void LimeAide::InitDefaultCommand() {}
@@ -114,6 +114,35 @@ void LimeAide::setLimeRoxPipe0(){
     table->PutNumber("pipeline",0);
 }
 
+// functions to use with tables of targeting information
+
+void LimeAide::LimeSpeeds(float xIn){
+  float *x; 
+  x = &m_trgtAreas[0];
+  float *y; 
+  y = &m_shooterSetPoints[0];
+  int nx = m_nX;
+  float spd = SPAMutil::SPAMlerp(x , y  , nx, xIn);
+   m_limeSpeedSetpoint = (double)spd;
+}
+ 
+void LimeAide::LimeAngles(float xIn){
+  float *x; 
+  x = &m_trgtAreas[0];
+  float *y; 
+  y = &m_domeAngles[0];
+  int nx = m_nX;
+  float ang = SPAMutil::SPAMlerp(x , y  , nx, xIn);
+   m_limeAngleSetpoint = (double)ang;
+}
+
+  double LimeAide::getLimeSpdStPt(){
+   return m_limeSpeedSetpoint;
+  }
+
+	double LimeAide::getLimeDomeStPt(){
+   return m_limeAngleSetpoint;
+  }
 
 
 

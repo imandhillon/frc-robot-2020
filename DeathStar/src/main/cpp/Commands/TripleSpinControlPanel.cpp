@@ -26,6 +26,7 @@ void TripleSpinControlPanel::Initialize() {
 
   int detectedColor = Robot::warpDriveInverter -> getDetectedColor();
   seenColors[detectedColor]++;
+  tripleSpinDone = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -41,7 +42,10 @@ void TripleSpinControlPanel::Execute() {
     }
   }
   else
-    Robot::warpDriveInverter -> MoveMotor(0.50);
+    if (!tripleSpinDone)
+      Robot::warpDriveInverter -> MoveMotor(0.50);
+    else
+      Robot::warpDriveInverter -> MoveMotor(0.25);
   int detectedColor = Robot::warpDriveInverter -> getDetectedColor();
   if ( detectedColor != lastColor)
   {
@@ -60,7 +64,7 @@ void TripleSpinControlPanel::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool TripleSpinControlPanel::IsFinished() { 
-  double deltaEncoder = Robot::warpDriveInverter -> getPosition(); - lastColorChangePos;
+  //double deltaEncoder = Robot::warpDriveInverter -> getPosition(); - lastColorChangePos;
   /*
   if (fabs(deltaEncoder) > MAX_DELTA_ENCODER){
     //SPAMutil::Log("TripleSpinControlPanel", "Colors not changing! Is the robot on the wheel?", SPAMutil::LOG_ERR);
@@ -74,7 +78,16 @@ bool TripleSpinControlPanel::IsFinished() {
     seenColors[Robot::warpDriveInverter -> GREEN] >= 7){
     //seenColors[Robot::warpDriveInverter -> YELLOW] >= 7){
     SPAMutil::Log("TripleSpinControlPanel", "All Colors Seen", SPAMutil::LOG_INFO);
-    if(Robot::warpDriveInverter -> getPosition() - initialPos > MAX_DISTANCE){
+    if(Robot::warpDriveInverter->getPosition() - initialPos > MAX_DISTANCE){
+      tripleSpinDone = true;
+      if (Robot::warpDriveInverter->getRequestedColor() != Robot::warpDriveInverter->NO_DATA && Robot::warpDriveInverter->getRequestedColor() != Robot::warpDriveInverter->ERROR){
+        if (Robot::warpDriveInverter->getRequestedColor() == Robot::warpDriveInverter->getDetectedColor()){
+          return true;
+        }
+        else{
+          return false;
+        }
+      }
      SPAMutil::Log("TripleSpinControlPanel", "Done :)", SPAMutil::LOG_INFO);
      return true;
     }

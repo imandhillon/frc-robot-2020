@@ -168,14 +168,14 @@ void IonCannon::AimCam() {
     if (Robot::limeAide->getLimeRoxInView()) {   
 		double error = Robot::limeAide->getLimeRoxX(); 
 		if (error > kCamTolerance) {
-			double speed = min(kCamPower * error + kCamFriction, kCamLimit);
+			double speed = std::min(kCamPower * error + kCamFriction, kCamLimit);
 			// if (speed > kCamLimit)
 			// 	speed = kCamLimit;
 			x = float(speed);
 			//turretMotor->Set(x);
 		}
 		else if (error < -kCamTolerance) {
-			double speed = max(kCamPower * error - kCamFriction, -kCamLimit);
+			double speed = std::max(kCamPower * error - kCamFriction, -kCamLimit);
 			// if (speed < -kCamLimit)
 			// 	speed = -kCamLimit;
 			x = float(speed);

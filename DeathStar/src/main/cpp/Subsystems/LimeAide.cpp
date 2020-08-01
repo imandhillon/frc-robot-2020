@@ -6,6 +6,9 @@
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableInstance.h"
 #include "SensorFilter.h"
+#include "frc/shuffleboard/Shuffleboard.h"
+#include "frc/shuffleboard/ShuffleboardTab.h"
+#include <frc/shuffleboard/BuiltInWidgets.h>
 
 LimeAide::LimeAide() : frc::Subsystem("LimeAide") { 
 
@@ -20,8 +23,15 @@ void LimeAide::Periodic() {
         frc::SmartDashboard::PutNumber("targetY",getLimeRoxY() );
         frc::SmartDashboard::PutNumber("targetA",getLimeRoxA() );
         frc::SmartDashboard::PutNumber("targetSkew",getLimeRoxS() );
-
         frc::SmartDashboard::PutBoolean("IseeTrgt", getLimeRoxInView());
+        
+        frc::Shuffleboard::GetTab("Competition").Add("TargetInView", getLimeRoxInView())
+          .WithWidget(frc::BuiltInWidgets::kBooleanBox).GetEntry();
+          //.WithProperties(wpi::StringMap(properties)) .GetEntry();
+        frc::Shuffleboard::GetTab("Competition").Add("TxOffset", getLimeRoxX())
+          .WithWidget(frc::BuiltInWidgets::kDial).GetEntry();
+        frc::Shuffleboard::GetTab("Competition").Add("TyOffset", getLimeRoxY())
+          .WithWidget(frc::BuiltInWidgets::kNumberSlider).GetEntry();
 }
 
 void LimeAide::LimeRoxTrack()
@@ -54,6 +64,7 @@ double tv = 0.;
   
   m_targetsAvailable = tv;
   m_targetX          = txFilter.GetAverage();
+  //m_targetX          = txFilter.ExpMovingAvg(tx, txFilter.GetCurAvg());
   m_targetY          = tyFilter.GetAverage();
   m_targetArea       = taFilter.GetAverage();
 

@@ -1,7 +1,10 @@
 
 #include "Subsystems/Hyperdrive.h"
 #include "Commands/JoyDriveCommand.h"
-
+#include "frc/shuffleboard/Shuffleboard.h"
+#include "frc/shuffleboard/ShuffleboardTab.h"
+#include <frc/shuffleboard/BuiltInWidgets.h>
+#include <wpi/StringMap.h>
 
 const double    kDriveMotorLimitAmps = 60.0;
 
@@ -109,6 +112,8 @@ void Hyperdrive::DriveArcade(std::shared_ptr<frc::Joystick> j)
 
     frc::SmartDashboard::PutNumber("joyY", y);
     frc::SmartDashboard::PutNumber("joyLPY", m_Yspeed);
+    frc::Shuffleboard::GetTab("Competition").Add("Speed", m_Yspeed)
+          .WithWidget(frc::BuiltInWidgets::kDial).GetEntry();
 }
 
 

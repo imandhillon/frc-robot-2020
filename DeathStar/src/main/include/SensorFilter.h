@@ -13,6 +13,7 @@
 class SensorFilter {
 	std::deque<double>	mData;
 	unsigned			mSize;
+	double				curTxAvg;
 
 public:
 	SensorFilter(unsigned values = 5);
@@ -21,6 +22,9 @@ public:
 	void SetSize(unsigned values);
 	void AddValue(double val);
 	double GetAverage();
+
+	double GetCurAvg();
+	double ExpMovingAvg(double newVal, double curAvg, double alpha = 0.5);
 
 };
 

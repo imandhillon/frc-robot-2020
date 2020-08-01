@@ -7,6 +7,9 @@
 #include "frc/smartdashboard/SmartDashboard.h"
 #include <sstream>
 #include <limits>
+#include "frc/shuffleboard/Shuffleboard.h"
+#include "frc/shuffleboard/ShuffleboardTab.h"
+#include <frc/shuffleboard/BuiltInWidgets.h>
 
 constexpr double kShooterMaxCurrent = 40.0;
 constexpr double kTurretMaxCurrent = 20.0;
@@ -156,6 +159,8 @@ void IonCannon::AimCamPosition() {
     }
     else {
         frc::SmartDashboard::PutNumber("stop turret ", 0);
+        // frc::Shuffleboard::GetTab("IonCannon").Add("TurretSpdControl", x)
+        //   .WithWidget(frc::BuiltInWidgets::kNumberSlider).GetEntry();
         AimStop();
     }
   
@@ -173,6 +178,7 @@ void IonCannon::AimCam() {
 			// 	speed = kCamLimit;
 			x = float(speed);
 			//turretMotor->Set(x);
+            targetLockedOn = false;
 		}
 		else if (error < -kCamTolerance) {
 			double speed = std::max(kCamPower * error - kCamFriction, -kCamLimit);
@@ -180,15 +186,18 @@ void IonCannon::AimCam() {
 			// 	speed = -kCamLimit;
 			x = float(speed);
 			//turretMotor->Set(x);
+            targetLockedOn = false;
 		}
 		else {
 			//turretMotor->Set(x);
 		    turretMotor->StopMotor();
+            targetLockedOn = true;
 		}
 	}
 	else {
 			//SPAMutil::Log("CamDrive","No data",SPAMutil::LOG_INFO);
 			turretMotor->StopMotor();
+            targetLockedOn = false;
 	}	
   /* why does turretQuadEncoder->GetPosition() return -90?
     if (x > 0) {
@@ -207,8 +216,15 @@ void IonCannon::AimCam() {
     }
   */
 
-    turretMotor ->Set(-x);
+    turretMotor->Set(-x);
     frc::SmartDashboard::PutNumber("turretSpd",x );
+
+    frc::Shuffleboard::GetTab("IonCannon").Add("TurretSpd", x)
+          .WithWidget(frc::BuiltInWidgets::kNumberBar).GetEntry();
+
+    frc::Shuffleboard::GetTab("Competition").Add("LockedOnTarget", targetLockedOn)
+          .WithWidget(frc::BuiltInWidgets::kBooleanBox).GetEntry();
+
 	
 }
 

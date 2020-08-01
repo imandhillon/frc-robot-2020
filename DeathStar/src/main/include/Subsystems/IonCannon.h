@@ -62,6 +62,8 @@ private:
 	bool shooterEnabled = true;
 
 	float m_domeServo = 0.0;
+	bool targetLockedOn = false;
+
 
 public:
 
